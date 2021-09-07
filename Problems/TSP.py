@@ -1,6 +1,8 @@
 from Library import TSPLib
+
 from random import randrange, random
 from os.path import join, expanduser
+from random import shuffle
 
 cities = TSPLib.load(join(expanduser('~'), 'data', 'TSPLib', 'ulysses22.tsp'))
 
@@ -10,10 +12,18 @@ max_distance = 1000000
 population_size = 100
 num_elites = 5
 
+strands_per_cell = 5
+epochs_till_migration = 5
+
 crossover_rate = 0.95
 mutation_rate = 0.02
 
-run_time = 30
+run_time = 15
+
+def create_strand():
+    strand = [i + 1 for i in range(strand_size)]
+    shuffle(strand)
+    return strand
 
 def fitness(strand):
     assert len(strand) == strand_size

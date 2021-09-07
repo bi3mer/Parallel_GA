@@ -1,9 +1,8 @@
 from random import choices, seed, shuffle
 from itertools import repeat
 
-from Utility.ProgressBar import update_progress
 from Utility.PriorityQueue import insert
-
+from Utility.Stochastic import weighted_sample
 from time import time
 
 class GA:
@@ -43,7 +42,7 @@ class GA:
 
             # build rest of population based on old one
             while len(new_population) < self.config.population_size:
-                strands = self.config.crossover(*choices(population, weights=weights, k=2))
+                strands = self.config.crossover(*weighted_sample(population, weights, k=2))
                 for strand in strands:
                     strand = self.config.mutate(strand)
                     fitness = self.config.fitness(strand)
