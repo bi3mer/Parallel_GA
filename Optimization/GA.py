@@ -4,6 +4,8 @@ from itertools import repeat
 from Utility.ProgressBar import update_progress
 from Utility.PriorityQueue import insert
 
+from time import time
+
 class GA:
     def __init__(self, config, rng_seed=None):
         self.config = config
@@ -11,7 +13,7 @@ class GA:
         if seed != None:
             seed(rng_seed)
 
-    def run(self, epochs):
+    def run(self):
         '''
         Two arrays are used instead of generating a new one on each epoch to 
         avoid the GC. 
@@ -20,29 +22,28 @@ class GA:
         population_fitness = []
         population = []
 
-        for _ in repeat(None, self.population_size):
-            strand = [i for i in range(strand_size)]
+        for _ in repeat(None, self.config.population_size):
+            strand = [i + 1 for i in range(strand_size)]
             shuffle(strand)
             strand_fitness = self.config.fitness(strand)
 
-            insert(population, population_fitness, strand, strand_fitness, self.population_size)
+            insert(population, population_fitness, strand, strand_fitness, self.config.population_size)
 
-        for e in range(epochs):
-            update_progress(e / epochs)
-
+        start_time = time()
+        while start_time + self.config.run_time > time():
             new_population = []
             new_fitness = []
             
-            weights = [self.max_distance - fit for fit in population_fitness]
+            weights = [self.config.max_distance - fit for fit in population_fitness]
 
             # add previous elites to population
-            for i in range(self.num_elites):
+            for i in range(self.config.num_elites):
                 new_population.append(population[i])
                 new_fitness.append(population_fitness[i])
 
             # build rest of population based on old one
-            while len(new_population) < self.population_size:
-                strands = self.config.crossover(choices(population, weights=weights, k=2))
+            while len(new_population) < self.config.population_size:
+                strands = self.config.crossover(*choices(population, weights=weights, k=2))
                 for strand in strands:
                     strand = self.config.mutate(strand)
                     fitness = self.config.fitness(strand)
@@ -51,6 +52,4 @@ class GA:
             population_fitness = new_fitness
             population = new_population
 
-        update_progress(1)
-
-        return [(self.fitness_function(self.city_list, val), val) for _, val in sorted(zip(population_fitness, population))]
+        return [(self.config.fitness(val), val) for _, val in sorted(zip(population_fitness, population))]
