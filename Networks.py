@@ -7,7 +7,7 @@ def ring_lattice(config):
         for __ in range(config.strands_per_cell):
             strand = config.create_strand()
             population.append((config.fitness(strand), strand))
-            insert_tup(population)
+            insert_tup(population, strand, config.fitness(strand), config.strands_per_cell)
 
         vertices.append(population)
 

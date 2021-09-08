@@ -4,22 +4,25 @@ from random import randrange, random
 from os.path import join, expanduser
 from random import shuffle
 
-cities = TSPLib.load(join(expanduser('~'), 'data', 'TSPLib', 'ulysses22.tsp'))
+cities = TSPLib.load(join(expanduser('~'), 'data', 'TSPLib', 'pr76.tsp'))
 
 strand_size = len(list(cities.get_nodes()))
 
 max_distance = 1000000
-population_size = 100
+population_size = 160
 num_elites_ga = 5
 num_elites_network = 1
 
-strands_per_cell = 10
-epochs_till_migration = 5
+strands_per_cell = 8
+epochs_till_migration = 10
 
 crossover_rate = 0.95
+migration_rate = 0.9
 mutation_rate = 0.02
 
-run_time = 2
+network_run_percentage = 0.9
+
+run_time = 20
 
 def create_strand():
     strand = [i + 1 for i in range(strand_size)]
@@ -66,6 +69,8 @@ Shortest paths can be found here:
     
     ulysses16 : 6859
     ulysses22 : 7013
+    brd14051  : 469385
+    pr76      : 108159
 
 max_distance is so large because it is used for the weighted random selection
 for crossover.

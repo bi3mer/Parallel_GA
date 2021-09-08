@@ -41,12 +41,12 @@ class GA:
                 new_fitness.append(population_fitness[i])
 
             # build rest of population based on old one
-            while len(new_population) < self.config.strands_per_cell:
-                strands = self.config.crossover(*weighted_sample(v, weights, k=2))
+            while len(new_population) < self.config.population_size:
+                strands = self.config.crossover(*weighted_sample(population, weights, k=2))
                 for strand in strands:
                     strand = self.config.mutate(strand)
                     fitness = self.config.fitness(strand)
-                    insert(new_population, new_fitness, strand, fitness, self.config.strands_per_cell)
+                    insert(new_population, new_fitness, strand, fitness, self.config.population_size)
 
             population_fitness = new_fitness
             population = new_population
