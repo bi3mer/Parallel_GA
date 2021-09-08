@@ -14,3 +14,35 @@ def insert(solutions, scores, sol, fit, max_length):
     insert_index = bisect_left(scores, fit)
     solutions.insert(insert_index, sol)
     scores.insert(insert_index, fit)
+
+def binary_search(solutions, fitness):
+    low = 0
+    high = len(solutions) - 1
+    mid = 0
+
+    while low <= high:
+        mid = (low + high) // 2
+        if solutions[mid][0] < fitness:
+            low = mid + 1
+        elif solutions[mid][0] > fitness:
+            high = mid - 1
+        else:
+            return mid
+
+    return low
+
+def insert_tup(solutions, new_solution, fitness, max_length, minimize=True):
+    # solutions => p(score, solution), ...]
+    if len(solutions) >= max_length:
+        if minimize:
+            if fitness < solutions[-1][0]:
+                solutions.pop()
+            else:
+                return
+        else:
+            if fitness > solutions[-1][0]:
+                solutions.pop()
+            else:
+                return
+    
+    solutions.insert(binary_search(solutions, fitness), (fitness, new_solution))

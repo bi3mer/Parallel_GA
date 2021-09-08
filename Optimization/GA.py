@@ -36,17 +36,17 @@ class GA:
             weights = [self.config.max_distance - fit for fit in population_fitness]
 
             # add previous elites to population
-            for i in range(self.config.num_elites):
+            for i in range(self.config.num_elites_ga):
                 new_population.append(population[i])
                 new_fitness.append(population_fitness[i])
 
             # build rest of population based on old one
-            while len(new_population) < self.config.population_size:
-                strands = self.config.crossover(*weighted_sample(population, weights, k=2))
+            while len(new_population) < self.config.strands_per_cell:
+                strands = self.config.crossover(*weighted_sample(v, weights, k=2))
                 for strand in strands:
                     strand = self.config.mutate(strand)
                     fitness = self.config.fitness(strand)
-                    insert(new_population, new_fitness, strand, fitness, self.config.population_size)
+                    insert(new_population, new_fitness, strand, fitness, self.config.strands_per_cell)
 
             population_fitness = new_fitness
             population = new_population

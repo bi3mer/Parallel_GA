@@ -10,15 +10,16 @@ strand_size = len(list(cities.get_nodes()))
 
 max_distance = 1000000
 population_size = 100
-num_elites = 5
+num_elites_ga = 5
+num_elites_network = 1
 
-strands_per_cell = 5
+strands_per_cell = 10
 epochs_till_migration = 5
 
 crossover_rate = 0.95
 mutation_rate = 0.02
 
-run_time = 15
+run_time = 2
 
 def create_strand():
     strand = [i + 1 for i in range(strand_size)]
