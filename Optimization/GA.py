@@ -13,10 +13,6 @@ class GA:
             seed(rng_seed)
 
     def run(self):
-        '''
-        Two arrays are used instead of generating a new one on each epoch to 
-        avoid the GC. 
-        '''
         population = []
         for _ in repeat(None, self.config.population_size):
             strand = self.config.create_strand()

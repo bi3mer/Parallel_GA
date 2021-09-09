@@ -1,8 +1,4 @@
-from itertools import repeat
 from random import seed
-
-from Utility.PriorityQueue import insert_tup
-from Utility.Stochastic import weighted_sample
 from time import time
 
 class RandomRestartHillClimbing:
@@ -13,10 +9,6 @@ class RandomRestartHillClimbing:
             seed(rng_seed)
 
     def run(self):
-        '''
-        Two arrays are used instead of generating a new one on each epoch to 
-        avoid the GC. 
-        '''
         best_strand = None
         best_fitness = 1000000
 

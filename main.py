@@ -7,30 +7,35 @@ from time import time
 
 seed = 1
 
-rrhc = RandomRestartHillClimbing(TSP)
+rrhc = RandomRestartHillClimbing(TSP, rng_seed=seed)
 start = time()
 rrhc_fitness, rrhc_strand = rrhc.run()
 end = time()
+print(f'RandomRestartHillClimbing took {end - start} seconds.')
 
-print(f'Random Restart Hill Climbing ({end - start})')
-print(rrhc_fitness)
+
+sa = SimulatedAnnealing(TSP, rng_seed=seed)
+start = time()
+sa_fitness, sa_strand = sa.run()
+end = time()
+print(f'Simulated Annealing took {end - start} seconds.')
 
 ga = GA(TSP, rng_seed=seed)
 start = time()
 ga_solutions = ga.run()
 end = time()
-
-print()
-print(f'GA ({end - start})')
-for res in ga_solutions[:5]:
-    print(res[0])
+print(f'Genetic Algorithm took {end - start} seconds.')
 
 ring_lattice = IslandGA(TSP, ring_lattice)
 start = time()
 rl_solutions = ring_lattice.run()
 end = time()
+print(f'Ring Lattice took {end - start} seconds.')
+
 
 print()
-print(f'Ring Lattice ({end - start})')
-for res in rl_solutions[:5]:
-    print(res[0])
+print()
+print(f'Random Restart Hill Climbing: {rrhc_fitness}')
+print(f'Simulated Annealing:          {sa_fitness}')
+print(f'GA:                           {ga_solutions[0][0]}')
+print(f'Ring Lattice:                 {rl_solutions[0][0]}')
