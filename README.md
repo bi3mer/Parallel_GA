@@ -10,7 +10,7 @@
 - implement simulated annealing
 - Island GA with simulated annealing
 - Island GA with GA
-- Implement GA with tup
+- <s>Implement GA with tup</s>
 - implement cell network
 - implement hier network
 - implement rcave network

@@ -23,7 +23,7 @@ mutation_rate = 0.02
 
 network_run_percentage = 0.9
 
-run_time = 45
+run_time = 5
 
 def create_strand():
     strand = [i + 1 for i in range(strand_size)]
@@ -60,11 +60,6 @@ def crossover(p_1, p_2):
 
     return p_1, p_2
 
-test = [0, 22, 21, 20, 24, 23, 45, 44, 43, 47, 46, 68, 67, 69, 66, 49, 48, 52, 26, 25, 19, 18, 30, 29, 28, 31, 32, 27, 42, 41, 53, 51, 50, 65, 64, 55, 54, 57, 56, 70, 71, 72, 63, 62, 61, 60, 58, 59, 40, 39, 33, 34, 38, 37, 35, 36, 17, 16, 15, 14, 73, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 74, 75]
-test = [i + 1 for i in test]
-print(fitness(test))
-import sys
-sys.exit(-1)
 
 '''
 Useful Stuff
