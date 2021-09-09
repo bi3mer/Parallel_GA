@@ -7,7 +7,10 @@
 
 ## TODO
 
-- implement simulated annealing
+- <s>Implement Random Restart Hill Climbing</s>
+- Implement simulated annealing
+- Implement Beam Search
+- Implement Stochastic Beam Search
 - Island GA with simulated annealing
 - Island GA with GA
 - <s>Implement GA with tup</s>

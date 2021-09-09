@@ -23,7 +23,7 @@ mutation_rate = 0.02
 
 network_run_percentage = 0.9
 
-run_time = 5
+run_time = 15
 
 def create_strand():
     strand = [i + 1 for i in range(strand_size)]
@@ -59,6 +59,17 @@ def crossover(p_1, p_2):
                cross_over_strand_p2 + [val for val in p_1 if val not in cross_over_strand_p2],
 
     return p_1, p_2
+
+def get_neighbors(strand):
+    neighbors = []
+    for i in range(len(strand)):
+        for j in range(i+1, len(strand)):
+            n = strand.copy()
+            n[i] = strand[j]
+            n[j] = strand[i]
+            neighbors.append(n)
+
+    return neighbors
 
 
 '''
