@@ -9,16 +9,17 @@
 
 - <s>Implement Random Restart Hill Climbing</s>
 - <s>Implement simulated annealing</s>
-- Implement Beam Search
+- <s>Get neighbor as a generator</s>
+- <s>Implement Beam Search</s>
 - Implement Stochastic Beam Search
 - Island GA with simulated annealing
 - Island GA with GA
 - <s>Implement GA with tup</s>
-- implement cell network
-- implement hier network
-- implement rcave network
-- figure out second problem
-- figure out third problem
+- Implement cell network
+- Implement hier network
+- Implement rcave network
+- Figure out second problem
+- Figure out third problem
 
 ## Citation
 

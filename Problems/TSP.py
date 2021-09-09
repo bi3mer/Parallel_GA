@@ -23,7 +23,7 @@ mutation_rate = 0.02
 
 network_run_percentage = 0.9
 
-run_time = 20
+run_time = 5
 
 alpha = 0.9 # simulated annealing
 k = 20 # beam search
@@ -64,15 +64,13 @@ def crossover(p_1, p_2):
     return p_1, p_2
 
 def get_neighbors(strand):
-    neighbors = []
     for i in range(len(strand)):
         for j in range(i+1, len(strand)):
             n = strand.copy()
             n[i] = strand[j]
             n[j] = strand[i]
-            neighbors.append(n)
 
-    return neighbors
+            yield n
 
 
 '''

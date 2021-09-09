@@ -25,7 +25,7 @@ class SimulatedAnnealing:
     def run(self):
         strand = self.config.create_strand()
         fitness = self.config.fitness(strand)
-        current_neighbors = self.config.get_neighbors(strand)
+        current_neighbors = list(self.config.get_neighbors(strand))
 
         best_strand = strand
         best_fitness = fitness
@@ -42,7 +42,7 @@ class SimulatedAnnealing:
             # Always hill climb if valid
             delta_f = new_fitness - fitness 
             if delta_f < 0:
-                current_neighbors = self.config.get_neighbors(strand)
+                current_neighbors = list(self.config.get_neighbors(strand))
                 strand = new_strand
                 fitness = new_fitness
                 T *= self.config.alpha
@@ -54,7 +54,7 @@ class SimulatedAnnealing:
             
             # Anneal if we can
             if random() < exp(-delta_f / T):
-                current_neighbors = self.config.get_neighbors(strand)
+                current_neighbors = list(self.config.get_neighbors(strand))
                 strand = new_strand
                 fitness = new_fitness
                 T *= self.config.alpha
