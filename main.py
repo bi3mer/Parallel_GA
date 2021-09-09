@@ -1,4 +1,3 @@
-from random import Random
 from Optimization import * 
 from Problems import *
 from Networks import *
@@ -13,6 +12,11 @@ rrhc_fitness, rrhc_strand = rrhc.run()
 end = time()
 print(f'RandomRestartHillClimbing took {end - start} seconds.')
 
+beam = LocalBeamSearch(TSP, rng_seed=seed)
+start = time()
+beam_fitness, beam_strand = beam.run()
+end = time()
+print(f'Local Beam Search took {end - start} seconds.')
 
 sa = SimulatedAnnealing(TSP, rng_seed=seed)
 start = time()
@@ -36,6 +40,7 @@ print(f'Ring Lattice took {end - start} seconds.')
 print()
 print()
 print(f'Random Restart Hill Climbing: {rrhc_fitness}')
+print(f'Local Beam Search:            {beam_fitness}')
 print(f'Simulated Annealing:          {sa_fitness}')
 print(f'GA:                           {ga_solutions[0][0]}')
 print(f'Ring Lattice:                 {rl_solutions[0][0]}')

@@ -23,7 +23,10 @@ mutation_rate = 0.02
 
 network_run_percentage = 0.9
 
-run_time = 5
+run_time = 20
+
+alpha = 0.9 # simulated annealing
+k = 20 # beam search
 
 def create_strand():
     strand = [i + 1 for i in range(strand_size)]
