@@ -1,6 +1,6 @@
 from Library import TSPLib
 
-from random import randrange, random
+from random import randrange, random, randint
 from os.path import join, expanduser
 from random import shuffle
 
@@ -23,7 +23,7 @@ mutation_rate = 0.02
 
 network_run_percentage = 0.9
 
-run_time = 5
+run_time = 10
 
 alpha = 0.9 # simulated annealing
 k = 20 # beam search
@@ -72,6 +72,15 @@ def get_neighbors(strand):
 
             yield n
 
+def get_random_neighbor(strand):
+    index_1 = randint(0, len(strand) - 1)
+    index_2 = randint(0, len(strand) - 1)
+
+    n = strand.copy()
+    n[index_1] = strand[index_2]
+    n[index_2] = strand[index_1]
+
+    return n
 
 '''
 Useful Stuff
@@ -84,6 +93,7 @@ Shortest paths can be found here:
     ulysses22 : 7013
     brd14051  : 469385
     pr76      : 108159
+    dsj1000   : 18659688
 
 max_distance is so large because it is used for the weighted random selection
 for crossover.

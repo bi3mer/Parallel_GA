@@ -1,4 +1,5 @@
-from random import seed, choice, random
+from random import seed, random
+from itertools import repeat
 from time import time
 from math import exp, log
 
@@ -9,14 +10,15 @@ class SimulatedAnnealing:
         if seed != None:
             seed(rng_seed)
 
-    def __initial_temp(self, strand_fitness, neighbors):
+    def __initial_temp(self, strand_fitness):
         '''
         Modified version of:
         https://github.com/fillipe-gsm/python-tsp/blob/master/python_tsp/heuristics/simulated_annealing.py
         '''
         dfx_list = []
-        for neighbor in neighbors:
-            dfx_list.append(self.config.fitness(neighbor) - strand_fitness)
+        for _ in repeat(None, 1000):
+            strand = self.config.get_random_neighbor(self.config.create_strand())
+            dfx_list.append(self.config.fitness(strand) - strand_fitness)
 
         dfx_mean = abs(sum(dfx_list) / len(dfx_list))
 
@@ -25,24 +27,22 @@ class SimulatedAnnealing:
     def run(self):
         strand = self.config.create_strand()
         fitness = self.config.fitness(strand)
-        current_neighbors = list(self.config.get_neighbors(strand))
 
         best_strand = strand
         best_fitness = fitness
 
-        initial_temp = self.__initial_temp(fitness, current_neighbors)
+        initial_temp = self.__initial_temp(fitness)
         T = initial_temp
         
         start_time = time()
         run_time = start_time + self.config.run_time
         while run_time > time():
-            new_strand = choice(current_neighbors)
+            new_strand = self.config.get_random_neighbor(strand)
             new_fitness = self.config.fitness(new_strand)
 
             # Always hill climb if valid
             delta_f = new_fitness - fitness 
             if delta_f < 0:
-                current_neighbors = list(self.config.get_neighbors(strand))
                 strand = new_strand
                 fitness = new_fitness
                 T *= self.config.alpha
@@ -54,7 +54,6 @@ class SimulatedAnnealing:
             
             # Anneal if we can
             if random() < exp(-delta_f / T):
-                current_neighbors = list(self.config.get_neighbors(strand))
                 strand = new_strand
                 fitness = new_fitness
                 T *= self.config.alpha

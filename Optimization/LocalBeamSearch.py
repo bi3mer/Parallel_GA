@@ -16,13 +16,16 @@ class LocalBeamSearch:
             strand = self.config.create_strand()
             insert_tup(population, strand, self.config.fitness(strand), self.config.k)
 
-        start_time = time()
-        run_time = start_time + self.config.run_time
-        while run_time > time():
+        stop_time = time() + self.config.run_time
+        while stop_time > time():
             new_population = []
             for strand in population:
                 for n_strand in self.config.get_neighbors(strand[1]):
                     insert_tup(new_population, n_strand, self.config.fitness(n_strand), self.config.k)
+
+                    if stop_time < time():
+                        population = new_population
+                        break
 
             population = new_population
 

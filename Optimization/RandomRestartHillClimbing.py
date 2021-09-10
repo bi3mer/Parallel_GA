@@ -1,5 +1,8 @@
 from random import seed
 from time import time
+from math import inf
+
+from .HillClimber import hill_climb
 
 class RandomRestartHillClimbing:
     def __init__(self, config, rng_seed=None):
@@ -10,25 +13,14 @@ class RandomRestartHillClimbing:
 
     def run(self):
         best_strand = None
-        best_fitness = 1000000
+        best_fitness = inf
 
-        start_time = time()
-        run_time = start_time + self.config.run_time
-        while run_time > time():
+        stop_time = time() + self.config.run_time
+        while stop_time > time():
             strand = self.config.create_strand()
             fitness = self.config.fitness(strand)
 
-            update_made = True
-
-            while update_made and run_time > time():
-                update_made = False
-                neighbors = self.config.get_neighbors(strand)
-                for new_strand in neighbors:
-                    new_fitness = self.config.fitness(new_strand)
-                    if new_fitness < fitness:
-                        update_made = True
-                        strand = new_strand
-                        fitness = new_fitness
+            fitness, strand = hill_climb(fitness, strand, self.config, stop_time, greedy=True)
 
             if fitness < best_fitness:
                 best_strand = strand
