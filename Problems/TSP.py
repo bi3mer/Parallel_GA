@@ -4,7 +4,7 @@ from random import randrange, random, randint
 from os.path import join, expanduser
 from random import shuffle
 
-cities = TSPLib.load(join(expanduser('~'), 'data', 'TSPLib', 'pr76.tsp'))
+cities = TSPLib.load(join(expanduser('~'), 'data', 'TSPLib', 'berlin52.tsp'))
 
 
 strand_size = len(list(cities.get_nodes()))
@@ -23,10 +23,10 @@ mutation_rate = 0.02
 
 network_run_percentage = 0.9
 
-run_time = 10
+run_time = 1
 
 alpha = 0.9 # simulated annealing
-k = 20 # beam search
+k = 10 # beam search
 
 def create_strand():
     strand = [i + 1 for i in range(strand_size)]
@@ -91,8 +91,9 @@ Shortest paths can be found here:
     
     ulysses16 : 6859
     ulysses22 : 7013
-    brd14051  : 469385
+    berlin52  : 7542
     pr76      : 108159
+    brd14051  : 469385
     dsj1000   : 18659688
 
 max_distance is so large because it is used for the weighted random selection

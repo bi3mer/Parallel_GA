@@ -1,4 +1,4 @@
-from random import seed, choice, random
+from random import seed
 from time import time
 
 from Utility.PriorityQueue import insert_tup
@@ -12,6 +12,7 @@ class LocalBeamSearch:
 
     def run(self):
         population = []
+
         for _ in range(self.config.k):
             strand = self.config.create_strand()
             insert_tup(population, strand, self.config.fitness(strand), self.config.k)

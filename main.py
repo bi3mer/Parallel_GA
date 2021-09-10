@@ -1,3 +1,4 @@
+from Optimization.StochasticBeamSearch import StochasticBeamSearch
 from Optimization import * 
 from Problems import *
 from Networks import *
@@ -7,11 +8,14 @@ from time import time
 hc = []
 rrhc = []
 lbs = []
+sbs = []
 sa = []
 ga = []
 rl = []
 
-for seed in range(6):
+for seed in range(10):
+    print(f'seed={seed}')
+
     hc_strand = TSP.create_strand()
     hc_fitness = TSP.fitness(hc_strand)
     start = time()
@@ -34,6 +38,13 @@ for seed in range(6):
     lbs.append(beam_fitness)
     print(f'Local Beam Search took {end - start} seconds.')
 
+    sbeam = StochasticBeamSearch(TSP, rng_seed=seed)
+    start = time()
+    sbeam_fitness, sbeam_strand = sbeam.run()
+    end = time()
+    sbs.append(sbeam_fitness)
+    print(f'Stochastic Beam Search took {end - start} seconds.')
+
     sa_alg = SimulatedAnnealing(TSP, rng_seed=seed)
     start = time()
     sa_fitness, sa_strand = sa_alg.run()
@@ -55,6 +66,8 @@ for seed in range(6):
     rl.append(rl_solutions[0][0])
     print(f'Ring Lattice took {end - start} seconds.')
 
+    print()
+
 def mean(l):
     return sum(l) / len(l)
 
@@ -63,6 +76,7 @@ print()
 print(f'Hill Climbing:                {min(hc)}\t{mean(hc)}')
 print(f'Random Restart Hill Climbing: {min(rrhc)}\t{mean(rrhc)}')
 print(f'Local Beam Search:            {min(lbs)}\t{mean(lbs)}')
+print(f'Stochastic Beam Search:       {min(sbs)}\t{mean(sbs)}')
 print(f'Simulated Annealing:          {min(sa)}\t{mean(sa)}')
 print(f'GA:                           {min(ga)}\t{mean(ga)}')
 print(f'Ring Lattice:                 {min(rl)}\t{mean(rl)}')
