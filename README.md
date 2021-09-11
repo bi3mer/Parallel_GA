@@ -11,8 +11,8 @@
 - <s>Implement simulated annealing</s>
 - <s>Get neighbor as a generator</s>
 - <s>Implement Beam Search</s>
-- Implement Stochastic Beam Search
-- Island GA with simulated annealing
+- <s>Implement Stochastic Beam Search</s>
+- <s>Island GA with simulated annealing</s>
 - Island GA with hill climbing (run for each best elite till time runs out)
 - Island GA with Beam Search
 - Island GA with GA

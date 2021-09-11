@@ -1,3 +1,4 @@
+from Problems import TSP
 from random import seed, random, choice
 from time import time
 
@@ -12,7 +13,7 @@ class IslandGA:
         if seed != None:
             seed(rng_seed)
 
-    def run(self):
+    def run(self, optimizer):
         # Network
         v, edges = self.network(self.config)
 
@@ -55,28 +56,32 @@ class IslandGA:
                 v[v_index] = new_population
                 
 
-        # GA
-        population = [population[0] for population in v]
-        population_size = len(population)
+        # run an optimizer with the final set of strands
+        return optimizer(
+            [population[0] for population in v],
+            self.config.run_time * (1 - self.config.network_run_percentage))
 
-        start_time = time()
-        network_run_time = start_time + (self.config.run_time * (1 - self.config.network_run_percentage))
-        while network_run_time > time():
-            new_population = []
-            weights = [self.config.max_distance - tup[0] for tup in population]
+        # population = [population[0] for population in v]
+        # population_size = len(population)
 
-            # maintain some number of elites between epochs
-            for i in range(self.config.num_elites_network):
-                new_population.append(population[i])
+        # start_time = time()
+        # network_run_time = start_time + (self.config.run_time * (1 - self.config.network_run_percentage))
+        # while network_run_time > time():
+        #     new_population = []
+        #     weights = [self.config.max_distance - tup[0] for tup in population]
 
-            # crossover and mutation for the rest
-            population = [strand[1] for strand in population]
-            while len(new_population) < population_size:
-                for strand in self.config.crossover(*weighted_sample(population, weights, k=2)):
-                    strand = self.config.mutate(strand)
-                    fitness = self.config.fitness(strand)
-                    insert_tup(new_population, strand, fitness, population_size)
+        #     # maintain some number of elites between epochs
+        #     for i in range(self.config.num_elites_network):
+        #         new_population.append(population[i])
 
-            population = new_population
+        #     # crossover and mutation for the rest
+        #     population = [strand[1] for strand in population]
+        #     while len(new_population) < population_size:
+        #         for strand in self.config.crossover(*weighted_sample(population, weights, k=2)):
+        #             strand = self.config.mutate(strand)
+        #             fitness = self.config.fitness(strand)
+        #             insert_tup(new_population, strand, fitness, population_size)
 
-        return population
+        #     population = new_population
+
+        # return population

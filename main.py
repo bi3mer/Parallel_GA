@@ -11,9 +11,9 @@ lbs = []
 sbs = []
 sa = []
 ga = []
-rl = []
+rl_sa = []
 
-for seed in range(10):
+for seed in range(5):
     print(f'seed={seed}')
 
     hc_strand = TSP.create_strand()
@@ -59,12 +59,12 @@ for seed in range(10):
     ga.append(ga_solutions[0][0])
     print(f'Genetic Algorithm took {end - start} seconds.')
 
-    rl_alg = IslandGA(TSP, ring_lattice)
+    rl_sa_alg = IslandGA(TSP, ring_lattice)
     start = time()
-    rl_solutions = rl_alg.run()
+    rl_solutions = rl_sa_alg.run(lambda population, time: SimulatedAnnealing(TSP).run(solution=population[0], run_time=time))
     end = time()
-    rl.append(rl_solutions[0][0])
-    print(f'Ring Lattice took {end - start} seconds.')
+    rl_sa.append(rl_solutions[0])
+    print(f'Ring Lattice + SA took {end - start} seconds.')
 
     print()
 
@@ -79,4 +79,4 @@ print(f'Local Beam Search:            {min(lbs)}\t{mean(lbs)}')
 print(f'Stochastic Beam Search:       {min(sbs)}\t{mean(sbs)}')
 print(f'Simulated Annealing:          {min(sa)}\t{mean(sa)}')
 print(f'GA:                           {min(ga)}\t{mean(ga)}')
-print(f'Ring Lattice:                 {min(rl)}\t{mean(rl)}')
+print(f'Ring Lattice + SA:            {min(rl_sa)}\t{mean(rl_sa)}')
