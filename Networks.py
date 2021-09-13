@@ -24,8 +24,6 @@ def ring_lattice(config):
     return vertices, edges
 
 def cell(config):
-    vertices = __initialize_vertice_population(config)
-
     '''
     Cell structure is a grid where cells connect in the four cardinal directions
     (north, east, south, and west). We need to upscale the 1 dimensional vertices
@@ -38,6 +36,8 @@ def cell(config):
     space. 
     '''
     DIR = ((0,1), (0,-1), (1,0), (-1,0))
+
+    vertices = __initialize_vertice_population(config)
     num_vertices = len(vertices)
     row_size = ceil(sqrt(num_vertices)) # row size and col size would be the same
 
@@ -63,10 +63,17 @@ def cell(config):
     return vertices, edges
 
 def hier(config):
-    raise NotImplementedError()
-    vertices = [[strand_initializer() for _ in range(strands_per_cell)] for __ in range(population_size / strands_per_cell)]
-    edges = []
+    '''
+    This is also referred to as a master-slave parallel GA but I'm not going
+    to call it that.
+    '''
+    vertices = __initialize_vertice_population(config)
     
+    edges = {}
+    edges[0] = [v for v in range(1, len(vertices))]
+    for v in range(1, len(vertices)):
+        edges[v] = [0]
+
     return vertices, edges
 
 def rcave(config):

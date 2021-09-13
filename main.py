@@ -22,7 +22,12 @@ c_hc = []
 c_bs = []
 c_ga = []
 
-for seed in range(5):
+h_sa = []
+h_hc = []
+h_bs = []
+h_ga = []
+
+for seed in range(50):
     print(f'seed={seed}')
 
     hc_alg = HillClimber(TSP)
@@ -123,6 +128,34 @@ for seed in range(5):
     c_ga.append(rl_solutions[0][0])
     print(f'Cell + GA took {end - start} seconds.')
 
+    rl_sa_alg = IslandGA(TSP, hier)
+    start = time()
+    rl_solutions = rl_sa_alg.run(lambda population, time: SimulatedAnnealing(TSP).run(solution=population[0], stop_time=time))
+    end = time()
+    h_sa.append(rl_solutions[0])
+    print(f'HIER + SA took {end - start} seconds.')
+
+    rl_hc_alg = IslandGA(TSP, hier)
+    start = time()
+    rl_solutions = rl_hc_alg.run(lambda population, time: HillClimber(TSP).run(population=population, stop_time=time))
+    end = time()
+    h_hc.append(rl_solutions[0])
+    print(f'HIER + HC took {end - start} seconds.')
+
+    rl_bs_alg = IslandGA(TSP, hier)
+    start = time()
+    rl_solutions = rl_hc_alg.run(lambda population, time: LocalBeamSearch(TSP).run(population=population, stop_time=time))
+    end = time()
+    h_bs.append(rl_solutions[0])
+    print(f'HIER + BS took {end - start} seconds.')
+
+    rl_ga_alg = IslandGA(TSP, hier)
+    start = time()
+    rl_solutions = rl_hc_alg.run(lambda population, time: GA(TSP).run(population=population, stop_time=time))
+    end = time()
+    h_ga.append(rl_solutions[0][0])
+    print(f'HIER + GA took {end - start} seconds.')
+
     print()
 
 def mean(l):
@@ -148,3 +181,7 @@ print_res(f'Cell + SA                   ', c_sa)
 print_res(f'Cell + HC                   ', c_hc)
 print_res(f'Cell + BS                   ', c_bs)
 print_res(f'Cell + GA                   ', c_ga)
+print_res(f'HIER + SA                   ', h_sa)
+print_res(f'HIER + HC                   ', h_hc)
+print_res(f'HIER + BS                   ', h_bs)
+print_res(f'HIER + GA                   ', h_ga)

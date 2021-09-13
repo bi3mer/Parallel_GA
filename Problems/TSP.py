@@ -4,7 +4,7 @@ from random import randrange, random, randint
 from os.path import join, expanduser
 from random import shuffle
 
-cities = TSPLib.load(join(expanduser('~'), 'data', 'TSPLib', 'ulysses22.tsp'))
+cities = TSPLib.load(join(expanduser('~'), 'data', 'TSPLib', 'att48.tsp'))
 strand_size = len(list(cities.get_nodes()))
 
 max_distance = 1000000
@@ -21,7 +21,7 @@ mutation_rate = 0.02
 
 network_run_percentage = 0.9
 
-run_time = 0.09
+run_time = 0.5
 
 alpha = 0.9 # simulated annealing
 k = 10 # beam search
@@ -89,6 +89,8 @@ Shortest paths can be found here:
     
     ulysses16 : 6859
     ulysses22 : 7013
+    bayg29    : 1610
+    att48     : 10628
     berlin52  : 7542
     pr76      : 108159
     brd14051  : 469385
