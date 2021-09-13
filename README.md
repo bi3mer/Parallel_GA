@@ -13,9 +13,9 @@
 - <s>Implement Beam Search</s>
 - <s>Implement Stochastic Beam Search</s>
 - <s>Island GA with simulated annealing</s>
-- Island GA with hill climbing (run for each best elite till time runs out)
-- Island GA with Beam Search
-- Island GA with GA
+- <s>Island GA with hill climbing</s>
+- <s>Island GA with Beam Search</s>
+- <s>Island GA with GA</s>
 - <s>Implement GA with tup</s>
 - Implement cell network
 - Implement hier network

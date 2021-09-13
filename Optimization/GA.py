@@ -12,16 +12,18 @@ class GA:
         if seed != None:
             seed(rng_seed)
 
-    def run(self):
-        population = []
-        for _ in repeat(None, self.config.population_size):
-            strand = self.config.create_strand()
-            fitness = self.config.fitness(strand)
-            insert_tup(population, strand, fitness, self.config.population_size)
+    def run(self, population=None, stop_time=None):
+        if population == None:
+            population = []
+            for _ in repeat(None, self.config.population_size):
+                strand = self.config.create_strand()
+                fitness = self.config.fitness(strand)
+                insert_tup(population, strand, fitness, self.config.population_size)
 
-        start_time = time()
-        run_time = start_time + self.config.run_time
-        while run_time > time():
+        if stop_time == None:
+            stop_time = time() + self.config.run_time
+
+        while stop_time > time():
             new_population = []
             weights = [self.config.max_distance - tup[0] for tup in population]
 

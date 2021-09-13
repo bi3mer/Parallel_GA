@@ -12,14 +12,16 @@ sbs = []
 sa = []
 ga = []
 rl_sa = []
+rl_hc = []
+rl_bs = []
+rl_ga = []
 
-for seed in range(5):
+for seed in range(10):
     print(f'seed={seed}')
 
-    hc_strand = TSP.create_strand()
-    hc_fitness = TSP.fitness(hc_strand)
+    hc_alg = HillClimber(TSP)
     start = time()
-    hc_fitness, hc_strand = hill_climb(hc_fitness, hc_strand, TSP, start + TSP.run_time, greedy=True)
+    hc_fitness, hc_strand = hc_alg.run()
     end = time()
     hc.append(hc_fitness)
     print(f'Hill Climb took {end - start} seconds.')
@@ -61,22 +63,50 @@ for seed in range(5):
 
     rl_sa_alg = IslandGA(TSP, ring_lattice)
     start = time()
-    rl_solutions = rl_sa_alg.run(lambda population, time: SimulatedAnnealing(TSP).run(solution=population[0], run_time=time))
+    rl_solutions = rl_sa_alg.run(lambda population, time: SimulatedAnnealing(TSP).run(solution=population[0], stop_time=time))
     end = time()
     rl_sa.append(rl_solutions[0])
     print(f'Ring Lattice + SA took {end - start} seconds.')
+
+    rl_hc_alg = IslandGA(TSP, ring_lattice)
+    start = time()
+    rl_solutions = rl_hc_alg.run(lambda population, time: HillClimber(TSP).run(population=population, stop_time=time))
+    end = time()
+    rl_hc.append(rl_solutions[0])
+    print(f'Ring Lattice + HC took {end - start} seconds.')
+
+    rl_bs_alg = IslandGA(TSP, ring_lattice)
+    start = time()
+    rl_solutions = rl_hc_alg.run(lambda population, time: LocalBeamSearch(TSP).run(population=population, stop_time=time))
+    end = time()
+    rl_bs.append(rl_solutions[0])
+    print(f'Ring Lattice + BS took {end - start} seconds.')
+
+    rl_ga_alg = IslandGA(TSP, ring_lattice)
+    start = time()
+    rl_solutions = rl_hc_alg.run(lambda population, time: GA(TSP).run(population=population, stop_time=time))
+    end = time()
+    rl_ga.append(rl_solutions[0][0])
+    print(f'Ring Lattice + GA took {end - start} seconds.')
 
     print()
 
 def mean(l):
     return sum(l) / len(l)
 
+def print_res(title, l):
+    print(f'{title}\t{min(l)}\t{mean(l)}\t{max(l)}')
+
 print()
 print()
-print(f'Hill Climbing:                {min(hc)}\t{mean(hc)}')
-print(f'Random Restart Hill Climbing: {min(rrhc)}\t{mean(rrhc)}')
-print(f'Local Beam Search:            {min(lbs)}\t{mean(lbs)}')
-print(f'Stochastic Beam Search:       {min(sbs)}\t{mean(sbs)}')
-print(f'Simulated Annealing:          {min(sa)}\t{mean(sa)}')
-print(f'GA:                           {min(ga)}\t{mean(ga)}')
-print(f'Ring Lattice + SA:            {min(rl_sa)}\t{mean(rl_sa)}')
+print('Algorithm\t\t\tMin\tMean\tMax')
+print_res(f'Hill Climbing               ', hc)
+print_res(f'Random Restart Hill Climbing', rrhc)
+print_res(f'Local Beam Search           ', lbs)
+print_res(f'Stochastic Beam Search      ', sbs)
+print_res(f'Simulated Annealing         ', sa)
+print_res(f'Genetic Algorithm           ', ga)
+print_res(f'Ring Lattice + SA           ', rl_sa)
+print_res(f'Ring Lattice + HC           ', rl_hc)
+print_res(f'Ring Lattice + BS           ', rl_bs)
+print_res(f'Ring Lattice + GA           ', rl_ga)

@@ -10,14 +10,16 @@ class LocalBeamSearch:
         if seed != None:
             seed(rng_seed)
 
-    def run(self):
-        population = []
+    def run(self, population=None, stop_time=None):
+        if population == None:
+            population = []
+            for _ in range(self.config.k):
+                strand = self.config.create_strand()
+                insert_tup(population, strand, self.config.fitness(strand), self.config.k)
 
-        for _ in range(self.config.k):
-            strand = self.config.create_strand()
-            insert_tup(population, strand, self.config.fitness(strand), self.config.k)
+        if stop_time == None:
+            stop_time = time() + self.config.run_time
 
-        stop_time = time() + self.config.run_time
         while stop_time > time():
             new_population = []
             for strand in population:

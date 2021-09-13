@@ -17,8 +17,7 @@ class IslandGA:
         # Network
         v, edges = self.network(self.config)
 
-        start_time = time()
-        network_run_time = start_time + (self.config.run_time * self.config.network_run_percentage)
+        network_run_time = time() + (self.config.run_time * self.config.network_run_percentage)
         epoch = 1
         while network_run_time > time():
             epoch += 1
@@ -59,7 +58,7 @@ class IslandGA:
         # run an optimizer with the final set of strands
         return optimizer(
             [population[0] for population in v],
-            self.config.run_time * (1 - self.config.network_run_percentage))
+            time() + self.config.run_time * (1 - self.config.network_run_percentage))
 
         # population = [population[0] for population in v]
         # population_size = len(population)
