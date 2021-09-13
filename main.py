@@ -11,12 +11,18 @@ lbs = []
 sbs = []
 sa = []
 ga = []
+
 rl_sa = []
 rl_hc = []
 rl_bs = []
 rl_ga = []
 
-for seed in range(10):
+c_sa = []
+c_hc = []
+c_bs = []
+c_ga = []
+
+for seed in range(5):
     print(f'seed={seed}')
 
     hc_alg = HillClimber(TSP)
@@ -89,13 +95,41 @@ for seed in range(10):
     rl_ga.append(rl_solutions[0][0])
     print(f'Ring Lattice + GA took {end - start} seconds.')
 
+    rl_sa_alg = IslandGA(TSP, cell)
+    start = time()
+    rl_solutions = rl_sa_alg.run(lambda population, time: SimulatedAnnealing(TSP).run(solution=population[0], stop_time=time))
+    end = time()
+    c_sa.append(rl_solutions[0])
+    print(f'Cell + SA took {end - start} seconds.')
+
+    rl_hc_alg = IslandGA(TSP, cell)
+    start = time()
+    rl_solutions = rl_hc_alg.run(lambda population, time: HillClimber(TSP).run(population=population, stop_time=time))
+    end = time()
+    c_hc.append(rl_solutions[0])
+    print(f'Cell + HC took {end - start} seconds.')
+
+    rl_bs_alg = IslandGA(TSP, cell)
+    start = time()
+    rl_solutions = rl_hc_alg.run(lambda population, time: LocalBeamSearch(TSP).run(population=population, stop_time=time))
+    end = time()
+    c_bs.append(rl_solutions[0])
+    print(f'Cell + BS took {end - start} seconds.')
+
+    rl_ga_alg = IslandGA(TSP, cell)
+    start = time()
+    rl_solutions = rl_hc_alg.run(lambda population, time: GA(TSP).run(population=population, stop_time=time))
+    end = time()
+    c_ga.append(rl_solutions[0][0])
+    print(f'Cell + GA took {end - start} seconds.')
+
     print()
 
 def mean(l):
     return sum(l) / len(l)
 
 def print_res(title, l):
-    print(f'{title}\t{min(l)}\t{mean(l)}\t{max(l)}')
+    print(f'{title}\t{min(l)}\t{int(mean(l))}\t{max(l)}')
 
 print()
 print()
@@ -110,3 +144,7 @@ print_res(f'Ring Lattice + SA           ', rl_sa)
 print_res(f'Ring Lattice + HC           ', rl_hc)
 print_res(f'Ring Lattice + BS           ', rl_bs)
 print_res(f'Ring Lattice + GA           ', rl_ga)
+print_res(f'Cell + SA                   ', c_sa)
+print_res(f'Cell + HC                   ', c_hc)
+print_res(f'Cell + BS                   ', c_bs)
+print_res(f'Cell + GA                   ', c_ga)
