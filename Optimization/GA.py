@@ -6,13 +6,15 @@ from Utility.Stochastic import weighted_sample
 from time import time
 
 class GA:
-    def __init__(self, config, rng_seed=None):
+    def __init__(self, config):
         self.config = config
 
+        
+
+    def run(self, population=None, stop_time=None, rng_seed=None):
         if seed != None:
             seed(rng_seed)
 
-    def run(self, population=None, stop_time=None):
         if population == None:
             population = []
             for _ in repeat(None, self.config.population_size):
@@ -41,4 +43,4 @@ class GA:
 
             population = new_population
 
-        return population
+        return population[0]

@@ -1,19 +1,19 @@
-from Problems import TSP
-from random import seed, random, choice
+from random import seed, random
 from time import time
 
 from Utility.Stochastic import weighted_sample
 from Utility.PriorityQueue import insert_tup
 
 class IslandGA:
-    def __init__(self, config, network, rng_seed=None):
+    def __init__(self, config, network, fine_tuner):
         self.config = config
         self.network = network
+        self.fine_tuner = fine_tuner
 
+    def run(self, rng_seed=None):
         if seed != None:
             seed(rng_seed)
 
-    def run(self, optimizer):
         # Network
         v, edges = self.network(self.config)
 
@@ -56,31 +56,6 @@ class IslandGA:
                 
 
         # run an optimizer with the final set of strands
-        return optimizer(
+        return self.fine_tuner(
             [population[0] for population in v],
             time() + self.config.run_time * (1 - self.config.network_run_percentage))
-
-        # population = [population[0] for population in v]
-        # population_size = len(population)
-
-        # start_time = time()
-        # network_run_time = start_time + (self.config.run_time * (1 - self.config.network_run_percentage))
-        # while network_run_time > time():
-        #     new_population = []
-        #     weights = [self.config.max_distance - tup[0] for tup in population]
-
-        #     # maintain some number of elites between epochs
-        #     for i in range(self.config.num_elites_network):
-        #         new_population.append(population[i])
-
-        #     # crossover and mutation for the rest
-        #     population = [strand[1] for strand in population]
-        #     while len(new_population) < population_size:
-        #         for strand in self.config.crossover(*weighted_sample(population, weights, k=2)):
-        #             strand = self.config.mutate(strand)
-        #             fitness = self.config.fitness(strand)
-        #             insert_tup(new_population, strand, fitness, population_size)
-
-        #     population = new_population
-
-        # return population

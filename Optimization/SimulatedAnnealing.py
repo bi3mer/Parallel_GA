@@ -4,11 +4,8 @@ from time import time
 from math import exp, log
 
 class SimulatedAnnealing:
-    def __init__(self, config, rng_seed=None):
+    def __init__(self, config):
         self.config = config
-
-        if seed != None:
-            seed(rng_seed)
 
     def __initial_temp(self, strand_fitness):
         '''
@@ -24,7 +21,10 @@ class SimulatedAnnealing:
 
         return -dfx_mean / log(0.5)
 
-    def run(self, solution=None, stop_time=None):
+    def run(self, solution=None, stop_time=None, rng_seed=None):
+        if seed != None:
+            seed(rng_seed)
+
         if solution == None:
             strand = self.config.create_strand()
             fitness = self.config.fitness(strand)

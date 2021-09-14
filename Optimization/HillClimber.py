@@ -5,7 +5,7 @@ class HillClimber:
     def __init__(self, config):
         self.config = config
 
-    def run(self, population=None, stop_time=None):
+    def run(self, population=None, stop_time=None, rng_seed=None):
         if population == None:
             strand = self.config.create_strand()
             fitness = self.config.fitness(strand)

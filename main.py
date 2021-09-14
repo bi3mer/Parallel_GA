@@ -1,3 +1,4 @@
+from Utility.ProgressBar import update_progress
 from Optimization.StochasticBeamSearch import StochasticBeamSearch
 from Optimization import * 
 from Problems import *
@@ -5,136 +6,59 @@ from Networks import *
 
 from time import time
 
-hc = []
-rrhc = []
-lbs = []
-sbs = []
-sa = []
-ga = []
+RUNS = 20
+CONFIG = TSP
 
-rl_sa = []
-rl_hc = []
-rl_bs = []
-rl_ga = []
 
-c_sa = []
-c_hc = []
-c_bs = []
-c_ga = []
+simulated_annealing_fine_tuner = lambda population, time: SimulatedAnnealing(TSP).run(solution=population[0], stop_time=time)
+hill_climb_fine_tuner = lambda population, time: HillClimber(TSP).run(population=population, stop_time=time)
+beam_search_fine_tuner = lambda population, time: HillClimber(TSP).run(population=population, stop_time=time)
+genetic_algorithm_fine_tuner = lambda population, time: GA(TSP).run(population=population, stop_time=time)
 
-cave_sa = []
-cave_hc = []
-cave_bs = []
-cave_ga = []
+algorithms = {
+    'Hill Climber                 ': HillClimber(CONFIG),
+    'Random Restart Hill Climbing ': RandomRestartHillClimbing(CONFIG),
+    'Local Beam Search            ': LocalBeamSearch(CONFIG),
+    'Stochastic Beam Search       ': StochasticBeamSearch(CONFIG),
+    'Simulated Annealing          ': SimulatedAnnealing(CONFIG),
+    'Genetic Algorithm            ': GA(CONFIG),
+    'Ring Lattice + SA            ': IslandGA(CONFIG, ring_lattice, simulated_annealing_fine_tuner),
+    'Ring Lattice + HC            ': IslandGA(CONFIG, ring_lattice, hill_climb_fine_tuner),
+    'Ring Lattice + BS            ': IslandGA(CONFIG, ring_lattice, beam_search_fine_tuner),
+    'Ring Lattice + GA            ': IslandGA(CONFIG, ring_lattice, beam_search_fine_tuner),
+    'Cell + SA                    ': IslandGA(CONFIG, cell, simulated_annealing_fine_tuner),
+    'Cell + HC                    ': IslandGA(CONFIG, cell, hill_climb_fine_tuner),
+    'Cell + BS                    ': IslandGA(CONFIG, cell, beam_search_fine_tuner),
+    'Cell + GA                    ': IslandGA(CONFIG, cell, genetic_algorithm_fine_tuner),
+    'Hierarchy + SA               ': IslandGA(CONFIG, hier, simulated_annealing_fine_tuner),
+    'Hierarchy + HC               ': IslandGA(CONFIG, hier, hill_climb_fine_tuner),
+    'Hierarchy + BS               ': IslandGA(CONFIG, hier, beam_search_fine_tuner),
+    'Hierarchy + GA               ': IslandGA(CONFIG, hier, genetic_algorithm_fine_tuner),
+    'Caveman + SA                 ': IslandGA(CONFIG, caveman, simulated_annealing_fine_tuner),
+    'Caveman + HC                 ': IslandGA(CONFIG, caveman, hill_climb_fine_tuner),
+    'Caveman + BS                 ': IslandGA(CONFIG, caveman, beam_search_fine_tuner),
+    'Caveman + GA                 ': IslandGA(CONFIG, caveman, genetic_algorithm_fine_tuner),
+    'Rewired Caveman + SA         ': IslandGA(CONFIG, rewired_caveman, simulated_annealing_fine_tuner),
+    'Rewired Caveman + HC         ': IslandGA(CONFIG, rewired_caveman, hill_climb_fine_tuner),
+    'Rewired Caveman + BS         ': IslandGA(CONFIG, rewired_caveman, beam_search_fine_tuner),
+    'Rewired Caveman + GA         ': IslandGA(CONFIG, rewired_caveman, genetic_algorithm_fine_tuner),
+    'Watts Strogatz Caveman + SA  ': IslandGA(CONFIG, watts_strogatz, simulated_annealing_fine_tuner),
+    'Watts Strogatz Caveman + HC  ': IslandGA(CONFIG, watts_strogatz, hill_climb_fine_tuner),
+    'Watts Strogatz Caveman + BS  ': IslandGA(CONFIG, watts_strogatz, beam_search_fine_tuner),
+    'Watts Strogatz Caveman + GA  ': IslandGA(CONFIG, watts_strogatz, genetic_algorithm_fine_tuner),
+}
 
-h_sa = []
-h_hc = []
-h_bs = []
-h_ga = []
+results = {}
+for alg_name in algorithms:
+    print(alg_name)
 
-def run_networks(title, network, seed):
-    # simulated annealing
-    sa_alg = IslandGA(TSP, network, rng_seed=seed)
-    start = time()
-    sa_solutions = sa_alg.run(lambda population, time: SimulatedAnnealing(TSP).run(solution=population[0], stop_time=time))
-    end = time()
-    print(f'{title} + SA took {end - start} seconds.')
-
-    # hill climber
-    hc_alg = IslandGA(TSP, network, rng_seed=seed)
-    start = time()
-    hc_solutions = hc_alg.run(lambda population, time: HillClimber(TSP).run(population=population, stop_time=time))
-    end = time()
-    print(f'{title} + Hill Climbing took {end - start} seconds.')
-
-    # beam search
-    bs_alg = IslandGA(TSP, network, rng_seed=seed)
-    start = time()
-    bs_solutions = bs_alg.run(lambda population, time: HillClimber(TSP).run(population=population, stop_time=time))
-    end = time()
-    print(f'{title} + beam search took {end - start} seconds.')
-
-    # genetic algorithm
-    ga_alg = IslandGA(TSP, network, rng_seed=seed)
-    start = time()
-    ga_solutions = ga_alg.run(lambda population, time: GA(TSP).run(population=population, stop_time=time))
-    end = time()
-    print(f'{title} + Genetic Algorithm took {end - start} seconds.')
-
-    # Return the fitness values. GA is the only one that returns the entire population.
-    # It is ordered so the first solution is the best solution.
-    return sa_solutions[0], hc_solutions[0], bs_solutions[0], ga_solutions[0][0]
-
-for seed in range(5):
-    print(f'seed={seed}')
-
-    hc_alg = HillClimber(TSP)
-    start = time()
-    hc_fitness, hc_strand = hc_alg.run()
-    end = time()
-    hc.append(hc_fitness)
-    print(f'Hill Climb took {end - start} seconds.')
-
-    rrhc_alg = RandomRestartHillClimbing(TSP, rng_seed=seed)
-    start = time()
-    rrhc_fitness, rrhc_strand = rrhc_alg.run()
-    end = time()
-    rrhc.append(rrhc_fitness)
-    print(f'RandomRestartHillClimbing took {end - start} seconds.')
-
-    beam = LocalBeamSearch(TSP, rng_seed=seed)
-    start = time()
-    beam_fitness, beam_strand = beam.run()
-    end = time()
-    lbs.append(beam_fitness)
-    print(f'Local Beam Search took {end - start} seconds.')
-
-    sbeam = StochasticBeamSearch(TSP, rng_seed=seed)
-    start = time()
-    sbeam_fitness, sbeam_strand = sbeam.run()
-    end = time()
-    sbs.append(sbeam_fitness)
-    print(f'Stochastic Beam Search took {end - start} seconds.')
-
-    sa_alg = SimulatedAnnealing(TSP, rng_seed=seed)
-    start = time()
-    sa_fitness, sa_strand = sa_alg.run()
-    end = time()
-    sa.append(sa_fitness)
-    print(f'Simulated Annealing took {end - start} seconds.')
-
-    ga_alg = GA(TSP, rng_seed=seed)
-    start = time()
-    ga_solutions = ga_alg.run()
-    end = time()
-    ga.append(ga_solutions[0][0])
-    print(f'Genetic Algorithm took {end - start} seconds.')
-
-    sa_res, hc_res, bs_res, ga_res = run_networks('Ring Lattice', ring_lattice, seed)
-    rl_sa.append(sa_res)
-    rl_hc.append(hc_res)
-    rl_bs.append(bs_res)
-    rl_ga.append(ga_res)
-
-    sa_res, hc_res, bs_res, ga_res = run_networks('CELL', cell, seed)
-    c_sa.append(sa_res)
-    c_hc.append(hc_res)
-    c_bs.append(bs_res)
-    c_ga.append(ga_res)
-
-    sa_res, hc_res, bs_res, ga_res = run_networks('Rewired Caveman', rewired_caveman, seed)
-    cave_sa.append(sa_res)
-    cave_hc.append(hc_res)
-    cave_bs.append(bs_res)
-    cave_ga.append(ga_res)
-
-    sa_res, hc_res, bs_res, ga_res = run_networks('HIER', hier, seed)
-    h_sa.append(sa_res)
-    h_hc.append(hc_res)
-    h_bs.append(bs_res)
-    h_ga.append(ga_res)
-
-    print()
+    res = []
+    alg = algorithms[alg_name]
+    for seed in range(RUNS):
+        res.append(alg.run(rng_seed=seed)[0])
+        update_progress((seed+1)/RUNS)
+    
+    results[alg_name] = res
 
 def mean(l):
     return sum(l) / len(l)
@@ -145,25 +69,6 @@ def print_res(title, l):
 print()
 print()
 print('Algorithm\t\t\tMean\tMin\tMax')
-print_res(f'Hill Climbing               ', hc)
-print_res(f'Random Restart Hill Climbing', rrhc)
-print_res(f'Local Beam Search           ', lbs)
-print_res(f'Stochastic Beam Search      ', sbs)
-print_res(f'Simulated Annealing         ', sa)
-print_res(f'Genetic Algorithm           ', ga)
-print_res(f'Ring Lattice + SA           ', rl_sa)
-print_res(f'Ring Lattice + HC           ', rl_hc)
-print_res(f'Ring Lattice + BS           ', rl_bs)
-print_res(f'Ring Lattice + GA           ', rl_ga)
-print_res(f'Cell + SA                   ', c_sa)
-print_res(f'Cell + HC                   ', c_hc)
-print_res(f'Cell + BS                   ', c_bs)
-print_res(f'Cell + GA                   ', c_ga)
-print_res(f'Rewired Caveman + SA        ', cave_sa)
-print_res(f'Rewired Caveman + HC        ', cave_hc)
-print_res(f'Rewired Caveman + BS        ', cave_bs)
-print_res(f'Rewired Caveman + GA        ', cave_ga)
-print_res(f'HIER + SA                   ', h_sa)
-print_res(f'HIER + HC                   ', h_hc)
-print_res(f'HIER + BS                   ', h_bs)
-print_res(f'HIER + GA                   ', h_ga)
+
+for title in algorithms:
+    print_res(title, results[title])

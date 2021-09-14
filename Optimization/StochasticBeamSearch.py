@@ -5,13 +5,13 @@ from math import inf
 from Utility.Stochastic import weighted_sample_tup
 
 class StochasticBeamSearch:
-    def __init__(self, config, rng_seed=None):
+    def __init__(self, config):
         self.config = config
 
+    def run(self, rng_seed=None):
         if seed != None:
             seed(rng_seed)
-
-    def run(self):
+            
         population = []
         best_strand = None
         best_fitness = inf

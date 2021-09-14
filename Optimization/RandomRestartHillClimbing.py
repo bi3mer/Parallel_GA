@@ -5,13 +5,13 @@ from math import inf
 from .HillClimber import HillClimber
 
 class RandomRestartHillClimbing:
-    def __init__(self, config, rng_seed=None):
+    def __init__(self, config):
         self.config = config
 
+    def run(self, rng_seed=None):
         if seed != None:
             seed(rng_seed)
 
-    def run(self):
         best_strand = None
         best_fitness = inf
 

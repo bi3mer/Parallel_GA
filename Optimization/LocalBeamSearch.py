@@ -4,13 +4,13 @@ from time import time
 from Utility.PriorityQueue import insert_tup
 
 class LocalBeamSearch:
-    def __init__(self, config, rng_seed=None):
+    def __init__(self, config):
         self.config = config
 
+    def run(self, population=None, stop_time=None, rng_seed=None):
         if seed != None:
             seed(rng_seed)
 
-    def run(self, population=None, stop_time=None):
         if population == None:
             population = []
             for _ in range(self.config.k):

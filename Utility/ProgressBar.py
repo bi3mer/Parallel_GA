@@ -9,7 +9,7 @@ def update_progress(progress, run=True):
     if not run:
         return
         
-    barLength = 50 # Modify this to change the length of the progress bar
+    barLength = 20 # Modify this to change the length of the progress bar
     status = ""
     if isinstance(progress, int):
         progress = float(progress)
