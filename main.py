@@ -22,15 +22,15 @@ c_hc = []
 c_bs = []
 c_ga = []
 
+cave_sa = []
+cave_hc = []
+cave_bs = []
+cave_ga = []
+
 h_sa = []
 h_hc = []
 h_bs = []
 h_ga = []
-
-s_sa = []
-s_hc = []
-s_bs = []
-s_ga = []
 
 def run_networks(title, network, seed):
     # simulated annealing
@@ -122,11 +122,11 @@ for seed in range(5):
     c_bs.append(bs_res)
     c_ga.append(ga_res)
 
-    sa_res, hc_res, bs_res, ga_res = run_networks('Small World Network', small_world_network, seed)
-    s_sa.append(sa_res)
-    s_hc.append(hc_res)
-    s_bs.append(bs_res)
-    s_ga.append(ga_res)
+    sa_res, hc_res, bs_res, ga_res = run_networks('Rewired Caveman', rewired_caveman, seed)
+    cave_sa.append(sa_res)
+    cave_hc.append(hc_res)
+    cave_bs.append(bs_res)
+    cave_ga.append(ga_res)
 
     sa_res, hc_res, bs_res, ga_res = run_networks('HIER', hier, seed)
     h_sa.append(sa_res)
@@ -159,10 +159,10 @@ print_res(f'Cell + SA                   ', c_sa)
 print_res(f'Cell + HC                   ', c_hc)
 print_res(f'Cell + BS                   ', c_bs)
 print_res(f'Cell + GA                   ', c_ga)
-print_res(f'Small World Network + SA    ', s_sa)
-print_res(f'Small World Network + HC    ', s_hc)
-print_res(f'Small World Network + BS    ', s_bs)
-print_res(f'Small World Network + GA    ', s_ga)
+print_res(f'Rewired Caveman + SA        ', cave_sa)
+print_res(f'Rewired Caveman + HC        ', cave_hc)
+print_res(f'Rewired Caveman + BS        ', cave_bs)
+print_res(f'Rewired Caveman + GA        ', cave_ga)
 print_res(f'HIER + SA                   ', h_sa)
 print_res(f'HIER + HC                   ', h_hc)
 print_res(f'HIER + BS                   ', h_bs)
