@@ -27,7 +27,45 @@ h_hc = []
 h_bs = []
 h_ga = []
 
-for seed in range(50):
+s_sa = []
+s_hc = []
+s_bs = []
+s_ga = []
+
+def run_networks(title, network, seed):
+    # simulated annealing
+    sa_alg = IslandGA(TSP, network, rng_seed=seed)
+    start = time()
+    sa_solutions = sa_alg.run(lambda population, time: SimulatedAnnealing(TSP).run(solution=population[0], stop_time=time))
+    end = time()
+    print(f'{title} + SA took {end - start} seconds.')
+
+    # hill climber
+    hc_alg = IslandGA(TSP, network, rng_seed=seed)
+    start = time()
+    hc_solutions = hc_alg.run(lambda population, time: HillClimber(TSP).run(population=population, stop_time=time))
+    end = time()
+    print(f'{title} + Hill Climbing took {end - start} seconds.')
+
+    # beam search
+    bs_alg = IslandGA(TSP, network, rng_seed=seed)
+    start = time()
+    bs_solutions = bs_alg.run(lambda population, time: HillClimber(TSP).run(population=population, stop_time=time))
+    end = time()
+    print(f'{title} + beam search took {end - start} seconds.')
+
+    # genetic algorithm
+    ga_alg = IslandGA(TSP, network, rng_seed=seed)
+    start = time()
+    ga_solutions = ga_alg.run(lambda population, time: GA(TSP).run(population=population, stop_time=time))
+    end = time()
+    print(f'{title} + Genetic Algorithm took {end - start} seconds.')
+
+    # Return the fitness values. GA is the only one that returns the entire population.
+    # It is ordered so the first solution is the best solution.
+    return sa_solutions[0], hc_solutions[0], bs_solutions[0], ga_solutions[0][0]
+
+for seed in range(5):
     print(f'seed={seed}')
 
     hc_alg = HillClimber(TSP)
@@ -72,89 +110,29 @@ for seed in range(50):
     ga.append(ga_solutions[0][0])
     print(f'Genetic Algorithm took {end - start} seconds.')
 
-    rl_sa_alg = IslandGA(TSP, ring_lattice)
-    start = time()
-    rl_solutions = rl_sa_alg.run(lambda population, time: SimulatedAnnealing(TSP).run(solution=population[0], stop_time=time))
-    end = time()
-    rl_sa.append(rl_solutions[0])
-    print(f'Ring Lattice + SA took {end - start} seconds.')
+    sa_res, hc_res, bs_res, ga_res = run_networks('Ring Lattice', ring_lattice, seed)
+    rl_sa.append(sa_res)
+    rl_hc.append(hc_res)
+    rl_bs.append(bs_res)
+    rl_ga.append(ga_res)
 
-    rl_hc_alg = IslandGA(TSP, ring_lattice)
-    start = time()
-    rl_solutions = rl_hc_alg.run(lambda population, time: HillClimber(TSP).run(population=population, stop_time=time))
-    end = time()
-    rl_hc.append(rl_solutions[0])
-    print(f'Ring Lattice + HC took {end - start} seconds.')
+    sa_res, hc_res, bs_res, ga_res = run_networks('CELL', cell, seed)
+    c_sa.append(sa_res)
+    c_hc.append(hc_res)
+    c_bs.append(bs_res)
+    c_ga.append(ga_res)
 
-    rl_bs_alg = IslandGA(TSP, ring_lattice)
-    start = time()
-    rl_solutions = rl_hc_alg.run(lambda population, time: LocalBeamSearch(TSP).run(population=population, stop_time=time))
-    end = time()
-    rl_bs.append(rl_solutions[0])
-    print(f'Ring Lattice + BS took {end - start} seconds.')
+    sa_res, hc_res, bs_res, ga_res = run_networks('Small World Network', small_world_network, seed)
+    s_sa.append(sa_res)
+    s_hc.append(hc_res)
+    s_bs.append(bs_res)
+    s_ga.append(ga_res)
 
-    rl_ga_alg = IslandGA(TSP, ring_lattice)
-    start = time()
-    rl_solutions = rl_hc_alg.run(lambda population, time: GA(TSP).run(population=population, stop_time=time))
-    end = time()
-    rl_ga.append(rl_solutions[0][0])
-    print(f'Ring Lattice + GA took {end - start} seconds.')
-
-    rl_sa_alg = IslandGA(TSP, cell)
-    start = time()
-    rl_solutions = rl_sa_alg.run(lambda population, time: SimulatedAnnealing(TSP).run(solution=population[0], stop_time=time))
-    end = time()
-    c_sa.append(rl_solutions[0])
-    print(f'Cell + SA took {end - start} seconds.')
-
-    rl_hc_alg = IslandGA(TSP, cell)
-    start = time()
-    rl_solutions = rl_hc_alg.run(lambda population, time: HillClimber(TSP).run(population=population, stop_time=time))
-    end = time()
-    c_hc.append(rl_solutions[0])
-    print(f'Cell + HC took {end - start} seconds.')
-
-    rl_bs_alg = IslandGA(TSP, cell)
-    start = time()
-    rl_solutions = rl_hc_alg.run(lambda population, time: LocalBeamSearch(TSP).run(population=population, stop_time=time))
-    end = time()
-    c_bs.append(rl_solutions[0])
-    print(f'Cell + BS took {end - start} seconds.')
-
-    rl_ga_alg = IslandGA(TSP, cell)
-    start = time()
-    rl_solutions = rl_hc_alg.run(lambda population, time: GA(TSP).run(population=population, stop_time=time))
-    end = time()
-    c_ga.append(rl_solutions[0][0])
-    print(f'Cell + GA took {end - start} seconds.')
-
-    rl_sa_alg = IslandGA(TSP, hier)
-    start = time()
-    rl_solutions = rl_sa_alg.run(lambda population, time: SimulatedAnnealing(TSP).run(solution=population[0], stop_time=time))
-    end = time()
-    h_sa.append(rl_solutions[0])
-    print(f'HIER + SA took {end - start} seconds.')
-
-    rl_hc_alg = IslandGA(TSP, hier)
-    start = time()
-    rl_solutions = rl_hc_alg.run(lambda population, time: HillClimber(TSP).run(population=population, stop_time=time))
-    end = time()
-    h_hc.append(rl_solutions[0])
-    print(f'HIER + HC took {end - start} seconds.')
-
-    rl_bs_alg = IslandGA(TSP, hier)
-    start = time()
-    rl_solutions = rl_hc_alg.run(lambda population, time: LocalBeamSearch(TSP).run(population=population, stop_time=time))
-    end = time()
-    h_bs.append(rl_solutions[0])
-    print(f'HIER + BS took {end - start} seconds.')
-
-    rl_ga_alg = IslandGA(TSP, hier)
-    start = time()
-    rl_solutions = rl_hc_alg.run(lambda population, time: GA(TSP).run(population=population, stop_time=time))
-    end = time()
-    h_ga.append(rl_solutions[0][0])
-    print(f'HIER + GA took {end - start} seconds.')
+    sa_res, hc_res, bs_res, ga_res = run_networks('HIER', hier, seed)
+    h_sa.append(sa_res)
+    h_hc.append(hc_res)
+    h_bs.append(bs_res)
+    h_ga.append(ga_res)
 
     print()
 
@@ -162,11 +140,11 @@ def mean(l):
     return sum(l) / len(l)
 
 def print_res(title, l):
-    print(f'{title}\t{min(l)}\t{int(mean(l))}\t{max(l)}')
+    print(f'{title}\t{int(mean(l))}\t{min(l)}\t{max(l)}')
 
 print()
 print()
-print('Algorithm\t\t\tMin\tMean\tMax')
+print('Algorithm\t\t\tMean\tMin\tMax')
 print_res(f'Hill Climbing               ', hc)
 print_res(f'Random Restart Hill Climbing', rrhc)
 print_res(f'Local Beam Search           ', lbs)
@@ -181,6 +159,10 @@ print_res(f'Cell + SA                   ', c_sa)
 print_res(f'Cell + HC                   ', c_hc)
 print_res(f'Cell + BS                   ', c_bs)
 print_res(f'Cell + GA                   ', c_ga)
+print_res(f'Small World Network + SA    ', s_sa)
+print_res(f'Small World Network + HC    ', s_hc)
+print_res(f'Small World Network + BS    ', s_bs)
+print_res(f'Small World Network + GA    ', s_ga)
 print_res(f'HIER + SA                   ', h_sa)
 print_res(f'HIER + HC                   ', h_hc)
 print_res(f'HIER + BS                   ', h_bs)

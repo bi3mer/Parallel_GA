@@ -76,9 +76,13 @@ def hier(config):
 
     return vertices, edges
 
-def rcave(config):
-    raise NotImplementedError()
-    vertices = [[strand_initializer() for _ in range(strands_per_cell)] for __ in range(population_size / strands_per_cell)]
-    edges = []
-    
+def small_world_network(config):
+    vertices = __initialize_vertice_population(config)
+
+    edges = {}
+    for v in range(len(vertices)):
+        edges[v] = ((v-1) % len(vertices), (v+1) % len(vertices))
+
+    # make a small world
+
     return vertices, edges
