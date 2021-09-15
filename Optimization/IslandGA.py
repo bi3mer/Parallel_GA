@@ -1,4 +1,5 @@
 from random import seed, random
+from math import inf
 from time import time
 
 from Utility.Stochastic import weighted_sample
@@ -17,7 +18,11 @@ class IslandGA:
         # Network
         v, edges = self.network(self.config)
 
-        network_run_time = time() + (self.config.run_time * self.config.network_run_percentage)
+        if self.fine_tuner == None:
+            network_run_time = time() + self.config.run_time
+        else:
+            network_run_time = time() + (self.config.run_time * self.config.network_run_percentage)
+
         epoch = 1
         while network_run_time > time():
             epoch += 1
@@ -56,6 +61,17 @@ class IslandGA:
                 
 
         # run an optimizer with the final set of strands
-        return self.fine_tuner(
-            [population[0] for population in v],
-            time() + self.config.run_time * (1 - self.config.network_run_percentage))
+        if self.fine_tuner != None:
+            return self.fine_tuner(
+                [population[0] for population in v],
+                time() + self.config.run_time * (1 - self.config.network_run_percentage))
+        else:
+            best_strand = None
+            best_fitness = inf
+
+            for population in v:
+                if population[0][0] < best_fitness:
+                    best_fitness = population[0][0]
+                    best_strand = population[0][1]
+
+            return best_fitness, best_strand

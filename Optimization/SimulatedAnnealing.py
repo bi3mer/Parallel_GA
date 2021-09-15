@@ -14,7 +14,7 @@ class SimulatedAnnealing:
         '''
         dfx_list = []
         for _ in repeat(None, 1000):
-            strand = self.config.get_random_neighbor(self.config.create_strand())
+            strand = self.config.get_random_neighbor(self.config.create_strand(), step_size=self.config.step_size)
             dfx_list.append(self.config.fitness(strand) - strand_fitness)
 
         dfx_mean = abs(sum(dfx_list) / len(dfx_list))
@@ -36,12 +36,21 @@ class SimulatedAnnealing:
 
         initial_temp = self.__initial_temp(fitness)
         T = initial_temp
+        step_size = self.config.step_size
         
         if stop_time == None:
             stop_time = time() + self.config.run_time
+        start_time = time()
+        total_time = stop_time - start_time
 
         while stop_time > time():
-            new_strand = self.config.get_random_neighbor(strand)
+            # print(step_size)
+            if step_size != None:
+                step_size = self.config.step_size * (1 - ((time() - start_time) / total_time))
+                # print(1 - ((time() - start_time) / total_time))
+                print(time() - start_time, total_time, (time() - start_time) / total_time)
+
+            new_strand = self.config.get_random_neighbor(strand, step_size=step_size)
             new_fitness = self.config.fitness(new_strand)
 
             # Always hill climb if valid

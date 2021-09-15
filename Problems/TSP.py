@@ -4,7 +4,7 @@ from random import randrange, random, randint
 from os.path import join, expanduser
 from random import shuffle
 
-cities = TSPLib.load(join(expanduser('~'), 'data', 'TSPLib', 'att48.tsp'))
+cities = TSPLib.load(join(expanduser('~'), 'data', 'TSPLib', 'lin105.tsp'))
 strand_size = len(list(cities.get_nodes()))
 
 max_distance = 1000000
@@ -17,14 +17,18 @@ epochs_till_migration = 10
 
 crossover_rate = 0.95
 migration_rate = 0.9
-mutation_rate = 0.02
+mutation_rate = 0.2
 
 network_run_percentage = 0.9
 
-run_time = 0.25
+run_time = 60
 
 alpha = 0.9 # simulated annealing
 k = 10 # beam search
+
+## used for continuous problems which TSP is not
+step_size = None
+step_size_alpha = None
 
 def create_strand():
     strand = [i + 1 for i in range(strand_size)]
@@ -61,7 +65,7 @@ def crossover(p_1, p_2):
 
     return p_1, p_2
 
-def get_neighbors(strand):
+def get_neighbors(strand, step_size=None):
     for i in range(len(strand)):
         for j in range(i+1, len(strand)):
             n = strand.copy()
@@ -70,7 +74,7 @@ def get_neighbors(strand):
 
             yield n
 
-def get_random_neighbor(strand):
+def get_random_neighbor(strand, step_size=None):
     index_1 = randint(0, len(strand) - 1)
     index_2 = randint(0, len(strand) - 1)
 
@@ -93,8 +97,9 @@ Shortest paths can be found here:
     att48     : 10628
     berlin52  : 7542
     pr76      : 108159
-    brd14051  : 469385
+    lin105    : 14379
     dsj1000   : 18659688
+    brd14051  : 469385
 
 max_distance is so large because it is used for the weighted random selection
 for crossover.

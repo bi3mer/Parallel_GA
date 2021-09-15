@@ -25,11 +25,16 @@ class StochasticBeamSearch:
                 best_strand = strand
                 best_fitness = fitness
             
+        step_size = self.config.step_size
         stop_time = time() + self.config.run_time
+
+        start_time = time()
+        total_time = stop_time - start_time
+        
         while stop_time > time():
             new_population = []
             for strand in population:
-                for n_strand in self.config.get_neighbors(strand[1]):
+                for n_strand in self.config.get_neighbors(strand[1], step_size=step_size):
                     fitness = self.config.fitness(n_strand)
                     new_population.append((fitness, n_strand))
 
@@ -41,5 +46,7 @@ class StochasticBeamSearch:
                         break
             
             population = weighted_sample_tup(new_population, self.config.k, reverse=True)
+            if step_size != None:
+                step_size = self.config.step_size * (1 - ((time() - start_time) / total_time))
 
         return best_fitness, best_strand
