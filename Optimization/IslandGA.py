@@ -1,9 +1,9 @@
 from random import seed, random
 from math import inf
-from time import time
 
 from Utility.Stochastic import weighted_sample
 from Utility.PriorityQueue import insert_tup
+from Utility import Timer
 
 class IslandGA:
     def __init__(self, config, network, fine_tuner):
@@ -15,16 +15,17 @@ class IslandGA:
         if seed != None:
             seed(rng_seed)
 
+        timer = Timer()
+        if self.fine_tuner == None:
+            timer.start(self.config.run_time)
+        else:
+            timer.start(self.config.run_time * self.config.network_run_percentage)
+
         # Network
         v, edges = self.network(self.config)
 
-        if self.fine_tuner == None:
-            network_run_time = time() + self.config.run_time
-        else:
-            network_run_time = time() + (self.config.run_time * self.config.network_run_percentage)
-
         epoch = 1
-        while network_run_time > time():
+        while not timer.is_done():
             epoch += 1
 
             # migration

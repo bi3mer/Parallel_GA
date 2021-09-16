@@ -1,8 +1,8 @@
 from random import seed
-from time import time
 from math import inf
 
 from Utility.Stochastic import weighted_sample_tup
+from Utility import Timer
 
 class StochasticBeamSearch:
     def __init__(self, config):
@@ -11,6 +11,9 @@ class StochasticBeamSearch:
     def run(self, rng_seed=None):
         if seed != None:
             seed(rng_seed)
+
+        timer = Timer()
+        timer.start(self.config.run_time)
             
         population = []
         best_strand = None
@@ -26,12 +29,8 @@ class StochasticBeamSearch:
                 best_fitness = fitness
             
         step_size = self.config.step_size
-        stop_time = time() + self.config.run_time
-
-        start_time = time()
-        total_time = stop_time - start_time
         
-        while stop_time > time():
+        while not timer.is_done():
             new_population = []
             for strand in population:
                 for n_strand in self.config.get_neighbors(strand[1], step_size=step_size):
@@ -42,11 +41,11 @@ class StochasticBeamSearch:
                         best_strand = n_strand
                         best_fitness = fitness
 
-                    if stop_time < time():
+                    if timer.is_done():
                         break
             
             population = weighted_sample_tup(new_population, self.config.k, reverse=True)
             if step_size != None:
-                step_size = self.config.step_size * (1 - ((time() - start_time) / total_time))
+                step_size = self.config.step_size * (1 - timer.percent_done())
 
         return best_fitness, best_strand

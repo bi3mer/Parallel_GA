@@ -1,7 +1,8 @@
 from random import seed, random
 from itertools import repeat
-from time import time
 from math import exp, log
+
+from Utility import Timer
 
 class SimulatedAnnealing:
     def __init__(self, config):
@@ -21,9 +22,15 @@ class SimulatedAnnealing:
 
         return -dfx_mean / log(0.5)
 
-    def run(self, solution=None, stop_time=None, rng_seed=None):
+    def run(self, solution=None, run_time=None, rng_seed=None):
         if seed != None:
             seed(rng_seed)
+
+        timer = Timer()
+        if run_time == None:
+            timer.start(self.config.run_time)
+        else:
+            timer.start(run_time)
 
         if solution == None:
             strand = self.config.create_strand()
@@ -38,17 +45,10 @@ class SimulatedAnnealing:
         T = initial_temp
         step_size = self.config.step_size
         
-        if stop_time == None:
-            stop_time = time() + self.config.run_time
-        start_time = time()
-        total_time = stop_time - start_time
-
-        while stop_time > time():
+        while not timer.is_done():
             # print(step_size)
             if step_size != None:
-                step_size = self.config.step_size * (1 - ((time() - start_time) / total_time))
-                # print(1 - ((time() - start_time) / total_time))
-                print(time() - start_time, total_time, (time() - start_time) / total_time)
+                step_size = self.config.step_size * (1 - timer.percent_done())
 
             new_strand = self.config.get_random_neighbor(strand, step_size=step_size)
             new_fitness = self.config.fitness(new_strand)

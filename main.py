@@ -3,8 +3,8 @@ from Optimization import *
 from Networks import *
 import Problems
 
-RUNS = 2
-CONFIG = Problems.TSP
+RUNS = 5
+CONFIG = Problems.Rastigin
 
 simulated_annealing_fine_tuner = lambda population, time: SimulatedAnnealing(CONFIG).run(solution=population[0], stop_time=time)
 hill_climb_fine_tuner = lambda population, time: HillClimber(CONFIG).run(population=population, stop_time=time)
@@ -12,11 +12,11 @@ beam_search_fine_tuner = lambda population, time: HillClimber(CONFIG).run(popula
 genetic_algorithm_fine_tuner = lambda population, time: GA(CONFIG).run(population=population, stop_time=time)
 
 algorithms = {
-    # 'Hill Climber                 ': HillClimber(CONFIG),
-    # 'Random Restart Hill Climbing ': RandomRestartHillClimbing(CONFIG),
-    # 'Local Beam Search            ': LocalBeamSearch(CONFIG),
-    # 'Stochastic Beam Search       ': StochasticBeamSearch(CONFIG),
-    # 'Simulated Annealing          ': SimulatedAnnealing(CONFIG),
+    'Hill Climber                 ': HillClimber(CONFIG),
+    'Random Restart Hill Climbing ': RandomRestartHillClimbing(CONFIG),
+    'Local Beam Search            ': LocalBeamSearch(CONFIG),
+    'Stochastic Beam Search       ': StochasticBeamSearch(CONFIG),
+    'Simulated Annealing          ': SimulatedAnnealing(CONFIG),
     'Genetic Algorithm            ': GA(CONFIG),
     'Ring Lattice                 ': IslandGA(CONFIG, ring_lattice, None),
     # 'Ring Lattice + SA            ': IslandGA(CONFIG, ring_lattice, simulated_annealing_fine_tuner),

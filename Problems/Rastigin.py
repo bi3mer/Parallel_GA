@@ -15,12 +15,12 @@ mutation_rate = 0.2
 
 network_run_percentage = 0.9
 
-run_time = 0.25
+run_time = 1
 
 alpha = 0.9 # simulated annealing
 k = 10 # beam search
 
-strand_size = 6
+strand_size = 8
 
 step_size = 1
 step_size_alpha = 0.9

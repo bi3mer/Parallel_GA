@@ -4,7 +4,7 @@ from random import randrange, random, randint
 from os.path import join, expanduser
 from random import shuffle
 
-cities = TSPLib.load(join(expanduser('~'), 'data', 'TSPLib', 'lin105.tsp'))
+cities = TSPLib.load(join(expanduser('~'), 'data', 'TSPLib', 'att48.tsp'))
 strand_size = len(list(cities.get_nodes()))
 
 max_distance = 1000000
@@ -21,7 +21,7 @@ mutation_rate = 0.2
 
 network_run_percentage = 0.9
 
-run_time = 60
+run_time = 1
 
 alpha = 0.9 # simulated annealing
 k = 10 # beam search

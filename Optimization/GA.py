@@ -3,17 +3,21 @@ from random import seed
 
 from Utility.PriorityQueue import insert_tup
 from Utility.Stochastic import weighted_sample
-from time import time
+from Utility import Timer
 
 class GA:
     def __init__(self, config):
         self.config = config
 
-        
-
-    def run(self, population=None, stop_time=None, rng_seed=None):
+    def run(self, population=None, run_time=None, rng_seed=None):
         if seed != None:
             seed(rng_seed)
+
+        timer = Timer()
+        if run_time == None:
+            timer.start(self.config.run_time)
+        else:
+            timer.start(run_time)
 
         if population == None:
             population = []
@@ -21,11 +25,7 @@ class GA:
                 strand = self.config.create_strand()
                 fitness = self.config.fitness(strand)
                 insert_tup(population, strand, fitness, self.config.population_size)
-
-        if stop_time == None:
-            stop_time = time() + self.config.run_time
-
-        while stop_time > time():
+        while not timer.is_done():
             new_population = []
             weights = [self.config.max_distance - tup[0] for tup in population]
 

@@ -13,3 +13,6 @@ class Timer:
     def percent_done(self):
         current_time = time()
         return min(1, (current_time - self.start_time) / (self.end_time - self.start_time))
+
+    def time_left(self):
+        return self.end_time - time()
