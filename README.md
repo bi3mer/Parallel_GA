@@ -62,78 +62,197 @@ Stochastic Beam Search          37595.05        35180.00        39786.00
 
 ### Rastigan
 
-#### n=5, time=1, runs=5
-
+#### n=10, time=0.1, runs=20, population_size=160
 ```
 Algorithm                       Mean    Min     Max
-Cell                            0.01    0.00    0.02
-Ring Lattice                    0.01    0.00    0.01
-Caveman                         0.01    0.00    0.02
-Rewired Caveman                 0.01    0.00    0.02
-Watts Strogatz Caveman          0.02    0.00    0.03
-Hierarchy                       0.02    0.00    0.08
-Genetic Algorithm               7.44    4.31    10.90
-Stochastic Beam Search          49.77   29.38   66.13
-Local Beam Search               58.92   48.17   66.20
-Hill Climber                    88.36   58.12   102.24
-Random Restart Hill Climbing    100.51  73.64   143.83
-Simulated Annealing             103.88  73.64   144.62
+Island GA Watts Strogatz        13.42   8.10    23.60
+Island GA Rewired Caveman       13.71   8.05    19.62
+Island GA Caveman               14.03   9.22    20.17
+Island GA Cell                  14.41   9.09    23.51
+Island GA Ring Lattice          14.45   10.65   23.59
+Island GA Hierarchy             15.71   7.15    26.21
+Genetic Algorithm               54.47   37.63   73.42
 ```
 
-#### n=6, time=1, runs=5
-
+#### n=10, time=0.5, runs=20, population_size=160
 ```
 Algorithm                       Mean    Min     Max
-Rewired Caveman                 0.07    0.02    0.23
-Ring Lattice                    0.12    0.04    0.33
-Caveman                         0.12    0.01    0.38
-Watts Strogatz Caveman          0.27    0.07    0.46
-Hierarchy                       0.38    0.05    0.92
-Cell                            0.56    0.00    2.47
-Genetic Algorithm               12.62   10.45   16.95
-Stochastic Beam Search          63.04   51.91   83.93
-Local Beam Search               65.81   57.68   85.28
-Random Restart Hill Climbing    115.66  88.51   168.31
-Simulated Annealing             119.12  91.88   173.55
-Hill Climber                    119.58  96.90   148.33
+Island GA Watts Strogatz        13.42   8.10    23.60
+Island GA Rewired Caveman       13.71   8.05    19.62
+Island GA Caveman               14.03   9.22    20.17
+Island GA Ring Lattice          14.13   10.65   17.27
+Island GA Cell                  14.41   9.09    23.51
+Island GA Hierarchy             15.71   7.15    26.21
+Genetic Algorithm               49.77   32.73   62.75
 ```
 
-#### n=7, time=1, runs=5
-
+#### n=10, time=1, runs=20, population_size=160
 ```
 Algorithm                       Mean    Min     Max
-Caveman                         0.66    0.05    1.97
-Rewired Caveman                 0.77    0.46    1.04
-Watts Strogatz Caveman          0.82    0.24    2.07
-Ring Lattice                    1.27    0.68    2.04
-Cell                            1.32    0.13    3.38
-Hierarchy                       2.80    0.87    3.88
-Genetic Algorithm               22.52   18.48   26.07
-Stochastic Beam Search          64.58   49.80   89.87
-Local Beam Search               68.31   59.19   89.87
-Hill Climber                    127.68  79.27   171.88
-Random Restart Hill Climbing    135.58  98.65   182.09
-Simulated Annealing             142.16  102.02  202.47
+Island GA Watts Strogatz        13.42   8.10    23.60
+Island GA Rewired Caveman       13.71   8.05    19.62
+Island GA Caveman               14.03   9.22    20.17
+Island GA Ring Lattice          14.13   10.65   17.27
+Island GA Cell                  14.41   9.09    23.51
+Island GA Hierarchy             15.71   7.15    26.21
+Genetic Algorithm               45.73   22.62   58.66
 ```
 
-#### n=8, time=1, runs=5
-
+#### n=10, time=5, runs=20, population_size=160
 ```
 Algorithm                       Mean    Min     Max
-Ring Lattice                    3.56    2.03    5.40
-Watts Strogatz Caveman          3.79    1.42    5.79
-Cell                            4.64    1.73    7.71
-Rewired Caveman                 5.23    2.22    8.63
-Caveman                         5.27    2.64    7.78
-Hierarchy                       6.66    3.98    10.04
-Genetic Algorithm               29.34   23.51   35.60
-Stochastic Beam Search          88.64   76.30   101.09
-Local Beam Search               89.94   76.30   98.19
-Hill Climber                    140.22  117.16  154.03
-Random Restart Hill Climbing    146.95  102.74  186.19
-Simulated Annealing             157.30  106.11  209.85
+Island GA Watts Strogatz        13.42   8.10    23.60
+Island GA Rewired Caveman       13.71   8.05    19.62
+Island GA Caveman               14.03   9.22    20.17
+Island GA Ring Lattice          14.13   10.65   17.27
+Island GA Cell                  14.41   9.09    23.51
+Island GA Hierarchy             15.71   7.15    26.21
+Genetic Algorithm               41.01   22.62   51.27
 ```
 
+#### n=10, time=0.1, runs=20, population_size=320
+```
+Algorithm                       Mean    Min     Max
+Island GA Cell                  11.25   6.76    14.46
+Island GA Watts Strogatz        11.96   3.62    18.98
+Island GA Ring Lattice          12.48   5.35    41.53
+Island GA Caveman               13.27   8.26    19.80
+Island GA Rewired Caveman       16.51   6.52    104.30
+Island GA Hierarchy             16.79   10.84   25.88
+Genetic Algorithm               59.15   35.20   76.60
+```
+
+#### n=10, time=0.5, runs=20, population_size=320
+```
+Algorithm                       Mean    Min     Max
+Island GA Rewired Caveman       10.24   6.52    16.22
+Island GA Ring Lattice          10.86   5.35    16.16
+Island GA Cell                  11.25   6.76    14.46
+Island GA Watts Strogatz        11.96   3.62    18.98
+Island GA Caveman               13.27   8.26    19.80
+Island GA Hierarchy             16.79   10.84   25.88
+Genetic Algorithm               49.91   35.20   62.19
+```
+
+#### n=10, time=1, runs=20, population_size=320
+```
+Algorithm                       Mean    Min     Max
+Island GA Rewired Caveman       10.24   6.52    16.22
+Island GA Ring Lattice          10.86   5.35    16.16
+Island GA Cell                  11.25   6.76    14.46
+Island GA Watts Strogatz        11.96   3.62    18.98
+Island GA Caveman               13.27   8.26    19.80
+Island GA Hierarchy             16.79   10.84   25.88
+Genetic Algorithm               49.58   35.20   62.19
+```
+
+
+#### n=10, time=5, runs=20, population_size=320
+```
+Algorithm                       Mean    Min     Max
+Island GA Rewired Caveman       10.24   6.52    16.22
+Island GA Ring Lattice          10.86   5.35    16.16
+Island GA Cell                  11.25   6.76    14.46
+Island GA Watts Strogatz        11.96   3.62    18.98
+Island GA Caveman               13.27   8.26    19.80
+Island GA Hierarchy             16.79   10.84   25.88
+Genetic Algorithm               42.30   33.97   52.53
+```
+
+#### n=10, time=0.1, runs=20, population_size=640
+```
+Algorithm                       Mean    Min     Max
+Island GA Caveman               10.28   4.99    14.73
+Island GA Cell                  10.67   6.22    14.60
+Island GA Ring Lattice          13.40   6.97    54.99
+Island GA Hierarchy             14.78   7.53    23.48
+Island GA Watts Strogatz        21.61   8.01    70.99
+Island GA Rewired Caveman       27.02   8.22    105.08
+Genetic Algorithm               64.86   48.79   78.73
+```
+
+#### n=10, time=0.5, runs=20, population_size=640
+```
+Algorithm                       Mean    Min     Max
+Island GA Ring Lattice          9.53    6.08    11.90
+Island GA Watts Strogatz        9.72    6.26    13.19
+Island GA Caveman               10.10   4.99    14.73
+Island GA Rewired Caveman       10.19   5.27    13.65
+Island GA Cell                  10.67   6.22    14.60
+Island GA Hierarchy             14.78   7.53    23.48
+Genetic Algorithm               56.45   45.23   69.42
+```
+
+#### n=10, time=1, runs=20, population_size=640
+```
+Algorithm                       Mean    Min     Max
+Island GA Ring Lattice          9.53    6.08    11.90
+Island GA Watts Strogatz        9.72    6.26    13.19
+Island GA Caveman               10.10   4.99    14.73
+Island GA Rewired Caveman       10.19   5.27    13.65
+Island GA Cell                  10.67   6.22    14.60
+Island GA Hierarchy             14.78   7.53    23.48
+Genetic Algorithm               53.74   45.23   65.30
+```
+
+#### n=10, time=5, runs=20, population_size=640
+```
+Algorithm                       Mean    Min     Max
+Island GA Ring Lattice          9.53    6.08    11.90
+Island GA Watts Strogatz        9.72    6.26    13.19
+Island GA Caveman               10.10   4.99    14.73
+Island GA Rewired Caveman       10.19   5.27    13.65
+Island GA Cell                  10.67   6.22    14.60
+Island GA Hierarchy             14.78   7.53    23.48
+Genetic Algorithm               47.35   38.61   55.06
+```
+
+#### n=10, time=0.1, runs=20, population_size=1280
+```
+Algorithm                       Mean    Min     Max
+Island GA Cell                  10.75   6.54    14.01
+Island GA Caveman               11.70   8.17    16.45
+Island GA Hierarchy             15.38   8.88    22.26
+Island GA Ring Lattice          18.97   9.79    74.50
+Genetic Algorithm               72.41   59.57   78.86
+*Island GA Rewired Caveman*     90.89   63.95   112.72
+*Island GA Watts Strogatz*      90.89   63.95   112.72
+```
+
+#### n=10, time=0.5, runs=20, population_size=1280
+```
+Island GA Ring Lattice          8.11    4.75    11.32
+Island GA Caveman               9.03    6.72    11.87
+Island GA Cell                  9.35    6.33    13.18
+Island GA Watts Strogatz        9.51    4.30    14.37
+Island GA Rewired Caveman       12.58   5.19    96.01
+Island GA Hierarchy             14.42   8.88    22.26
+Genetic Algorithm               59.95   31.94   72.68
+```
+
+#### n=10, time=1, runs=20, population_size=1280
+```
+Algorithm                       Mean    Min     Max
+Island GA Rewired Caveman       8.11    5.19    12.19
+Island GA Ring Lattice          8.11    4.75    11.32
+Island GA Watts Strogatz        8.68    4.30    14.37
+Island GA Caveman               9.03    6.72    11.87
+Island GA Cell                  9.35    6.33    13.18
+Island GA Hierarchy             14.42   8.88    22.26
+Genetic Algorithm               53.84   31.88   70.39
+```
+
+#### n=10, time=5, runs=20, population_size=1280
+```
+Algorithm                       Mean    Min     Max
+Island GA Rewired Caveman       8.11    5.19    12.19
+Island GA Ring Lattice          8.11    4.75    11.32
+Island GA Watts Strogatz        8.68    4.30    14.37
+Island GA Caveman               9.03    6.72    11.87
+Island GA Cell                  9.35    6.33    13.18
+Island GA Hierarchy             14.42   8.88    22.26
+Genetic Algorithm               44.97   28.88   57.15
+```
 
 ## Citation
 
