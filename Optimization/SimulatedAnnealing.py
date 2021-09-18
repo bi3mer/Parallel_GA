@@ -3,10 +3,11 @@ from itertools import repeat
 from math import exp, log
 
 from Utility import Timer
+from .Algorithm import Algorithm
 
-class SimulatedAnnealing:
+class SimulatedAnnealing(Algorithm):
     def __init__(self, config):
-        self.config = config
+        super().__init__(config)
 
     def __initial_temp(self, strand_fitness):
         '''
@@ -16,7 +17,7 @@ class SimulatedAnnealing:
         dfx_list = []
         for _ in repeat(None, 1000):
             strand = self.config.get_random_neighbor(self.config.create_strand(), step_size=self.config.step_size)
-            dfx_list.append(self.config.fitness(strand) - strand_fitness)
+            dfx_list.append(self.fitness(strand) - strand_fitness)
 
         dfx_mean = abs(sum(dfx_list) / len(dfx_list))
 
@@ -34,7 +35,7 @@ class SimulatedAnnealing:
 
         if solution == None:
             strand = self.config.create_strand()
-            fitness = self.config.fitness(strand)
+            fitness = self.fitness(strand)
         else:
             fitness, strand = solution
 
@@ -51,7 +52,7 @@ class SimulatedAnnealing:
                 step_size = self.config.step_size * (1 - timer.percent_done())
 
             new_strand = self.config.get_random_neighbor(strand, step_size=step_size)
-            new_fitness = self.config.fitness(new_strand)
+            new_fitness = self.fitness(new_strand)
 
             # Always hill climb if valid
             delta_f = new_fitness - fitness 

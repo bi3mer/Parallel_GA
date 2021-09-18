@@ -2,10 +2,10 @@ from random import randrange, random, randint, shuffle, uniform
 from math import cos, pi as PI
 
 max_distance = 1000000
-# population_size = 160
+population_size = 160
 # population_size = 320
 # population_size = 640
-population_size = 1280
+# population_size = 1280
 num_elites_ga = 5
 num_elites_network = 1
 
@@ -19,9 +19,9 @@ mutation_rate = 0.2
 network_run_percentage = 0.9
 
 run_time = 0.1
-run_time = 0.5
-run_time = 1
-run_time = 5
+# run_time = 0.5
+# run_time = 1
+# run_time = 5
 
 alpha = 0.9 # simulated annealing
 k = 10 # beam search

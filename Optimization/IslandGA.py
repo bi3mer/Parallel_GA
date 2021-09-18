@@ -4,10 +4,11 @@ from math import inf
 from Utility.Stochastic import weighted_sample
 from Utility.PriorityQueue import insert_tup
 from Utility import Timer
+from .Algorithm import Algorithm
 
-class IslandGA:
+class IslandGA(Algorithm):
     def __init__(self, config, network, fine_tuner):
-        self.config = config
+        super().__init__(config)
         self.network = network
         self.fine_tuner = fine_tuner
 
@@ -55,7 +56,7 @@ class IslandGA:
                 while len(new_population) < self.config.strands_per_cell:
                     for strand in self.config.crossover(*weighted_sample(population, weights, k=2)):
                         strand = self.config.mutate(strand)
-                        fitness = self.config.fitness(strand)
+                        fitness = self.fitness(strand)
                         insert_tup(new_population, strand, fitness, self.config.strands_per_cell)
                 
                 v[v_index] = new_population

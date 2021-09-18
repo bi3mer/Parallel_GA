@@ -2,10 +2,11 @@ from random import seed
 
 from Utility.PriorityQueue import insert_tup
 from Utility import Timer
+from .Algorithm import Algorithm
 
-class LocalBeamSearch:
+class LocalBeamSearch(Algorithm):
     def __init__(self, config):
-        self.config = config
+        super().__init__(config)
 
     def run(self, population=None, run_time=None, rng_seed=None):
         if seed != None:
@@ -21,14 +22,14 @@ class LocalBeamSearch:
             population = []
             for _ in range(self.config.k):
                 strand = self.config.create_strand()
-                insert_tup(population, strand, self.config.fitness(strand), self.config.k)
+                insert_tup(population, strand, self.fitness(strand), self.config.k)
 
         step_size = self.config.step_size
         while not timer.is_done():
             new_population = []
             for strand in population:
                 for n_strand in self.config.get_neighbors(strand[1], step_size=step_size):
-                    insert_tup(new_population, n_strand, self.config.fitness(n_strand), self.config.k)
+                    insert_tup(new_population, n_strand, self.fitness(n_strand), self.config.k)
 
                     if timer.is_done():
                         population = new_population

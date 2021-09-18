@@ -3,10 +3,11 @@ from math import inf
 
 from .HillClimber import HillClimber
 from Utility import Timer
+from .Algorithm import Algorithm
 
-class RandomRestartHillClimbing:
+class RandomRestartHillClimbing(Algorithm):
     def __init__(self, config):
-        self.config = config
+        super().__init__(config)
 
     def run(self, rng_seed=None):
         if seed != None:
@@ -22,7 +23,7 @@ class RandomRestartHillClimbing:
 
         while not timer.is_done():
             strand = self.config.create_strand()
-            fitness = self.config.fitness(strand)
+            fitness = self.fitness(strand)
 
             fitness, strand = hc.run(population=[(fitness, strand)], run_time=timer.time_left())
 

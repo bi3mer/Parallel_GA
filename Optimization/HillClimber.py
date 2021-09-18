@@ -1,8 +1,9 @@
 from Utility import Timer
+from .Algorithm import Algorithm
 
-class HillClimber:
+class HillClimber(Algorithm):
     def __init__(self, config):
-        self.config = config
+        super().__init__(config)
 
     def run(self, population=None, run_time=None, rng_seed=None):
         timer = Timer()
@@ -13,7 +14,7 @@ class HillClimber:
 
         if population == None:
             strand = self.config.create_strand()
-            fitness = self.config.fitness(strand)
+            fitness = self.fitness(strand)
         else:
             fitness, strand = population[0]
 
@@ -23,7 +24,7 @@ class HillClimber:
         while update_made and not timer.is_done():
             update_made = False
             for new_strand in self.config.get_neighbors(strand, step_size=step_size):
-                new_fitness = self.config.fitness(new_strand)
+                new_fitness = self.fitness(new_strand)
                 if new_fitness < fitness:
                     update_made = True
                     strand = new_strand

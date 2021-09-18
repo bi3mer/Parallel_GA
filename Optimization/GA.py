@@ -5,9 +5,11 @@ from Utility.PriorityQueue import insert_tup
 from Utility.Stochastic import weighted_sample
 from Utility import Timer
 
-class GA:
+from .Algorithm import Algorithm
+
+class GA(Algorithm):
     def __init__(self, config):
-        self.config = config
+        super().__init__(config)
 
     def run(self, population=None, run_time=None, rng_seed=None):
         if seed != None:
@@ -23,7 +25,7 @@ class GA:
             population = []
             for _ in repeat(None, self.config.population_size):
                 strand = self.config.create_strand()
-                fitness = self.config.fitness(strand)
+                fitness = self.fitness(strand)
                 insert_tup(population, strand, fitness, self.config.population_size)
         while not timer.is_done():
             new_population = []
@@ -38,7 +40,7 @@ class GA:
             while len(new_population) < self.config.population_size:
                 for strand in self.config.crossover(*weighted_sample(population, weights, k=2)):
                     strand = self.config.mutate(strand)
-                    fitness = self.config.fitness(strand)
+                    fitness = self.fitness(strand)
                     insert_tup(new_population, strand, fitness, self.config.population_size)
 
             population = new_population

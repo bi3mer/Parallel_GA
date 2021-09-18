@@ -3,7 +3,7 @@ from Optimization import *
 from Networks import *
 import Problems
 
-RUNS = 20
+RUNS = 10
 CONFIG = Problems.Rastrigin
 
 simulated_annealing_fine_tuner = lambda population, time: SimulatedAnnealing(CONFIG).run(solution=population[0], stop_time=time)
@@ -17,6 +17,7 @@ algorithms = {
     # 'Local Beam Search            ': LocalBeamSearch(CONFIG),
     # 'Stochastic Beam Search       ': StochasticBeamSearch(CONFIG),
     # 'Simulated Annealing          ': SimulatedAnnealing(CONFIG),
+    'Random Search                ': RandomSearch(CONFIG),
     'Genetic Algorithm            ': GA(CONFIG),
     'Island GA Ring Lattice       ': IslandGA(CONFIG, ring_lattice, None),
     # 'Ring Lattice + SA            ': IslandGA(CONFIG, ring_lattice, simulated_annealing_fine_tuner),
@@ -51,26 +52,28 @@ algorithms = {
 }
 
 results = {}
+fitness_calculations = {}
 for alg_name in algorithms:
     print(alg_name)
 
-    res = []
+    fitness_results = []
+    fitness_num = []
     alg = algorithms[alg_name]
     for seed in range(RUNS):
-        res.append(alg.run(rng_seed=seed)[0])
+        alg.fitness_calculations = 0
+        fitness_results.append(alg.run(rng_seed=seed)[0])
+        fitness_num.append(alg.fitness_calculations)
         update_progress((seed+1)/RUNS)
     
-    results[alg_name] = res
+    results[alg_name] = fitness_results
+    fitness_calculations[alg_name] = fitness_num
 
 def mean(l):
     return sum(l) / len(l)
 
-def print_res(title, l):
-    print(f'{title}\t{int(mean(l))}\t{min(l)}\t{max(l)}')
-
 print()
 print()
-print('Algorithm\t\t\tMean\tMin\tMax')
+print('Algorithm\t\t\tMean Fitness\tMin Fitness\tMax Fitness\tMean # Calculations')
 
 print_data = []
 for title in algorithms:
@@ -79,4 +82,4 @@ for title in algorithms:
 print_data.sort(key=lambda t: t[1])
 
 for r in print_data:
-    print(f'{r[0]}\t{r[1]:.2f}\t{r[2]:.2f}\t{r[3]:.2f}')
+    print(f'{r[0]}\t{r[1]:.2f}\t\t{r[2]:.2f}\t\t{r[3]:.2f}\t\t{mean(fitness_calculations[r[0]])}')
