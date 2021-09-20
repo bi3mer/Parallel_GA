@@ -16,6 +16,9 @@ def __initialize_vertice_population(config):
 
     return vertices
 
+def empty(config):
+    return __initialize_vertice_population(config), {}
+
 def ring_lattice(config):
     vertices = __initialize_vertice_population(config)
 

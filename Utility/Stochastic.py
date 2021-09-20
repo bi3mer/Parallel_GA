@@ -37,11 +37,11 @@ def weighted_sample_tup(array,  k, reverse=False):
     indices = []
 
     for _ in range(k):
-        total_weight = sum(array[i][0] for i in valid_indices)
+        # total_weight = sum(array[i][0] for i in valid_indices)
         current = 0
         r = random()
         for index_index, array_index in enumerate(valid_indices):
-            current += array[array_index][0] / total_weight
+            current += array[array_index][0]
             if r < current:
                 break
 

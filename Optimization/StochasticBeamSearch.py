@@ -10,6 +10,7 @@ class StochasticBeamSearch(Algorithm):
         super().__init__(config)
 
     def run(self, rng_seed=None):
+        raise NotImplementedError('weighted sample will not work with this current implementation.')
         if seed != None:
             seed(rng_seed)
 

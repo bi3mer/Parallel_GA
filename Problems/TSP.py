@@ -4,24 +4,27 @@ from random import randrange, random, randint
 from os.path import join, expanduser
 from random import shuffle
 
-cities = TSPLib.load(join(expanduser('~'), 'data', 'TSPLib', 'att48.tsp'))
+cities = TSPLib.load(join(expanduser('~'), 'data', 'TSPLib', 'bayg29.tsp'))
 strand_size = len(list(cities.get_nodes()))
 
-max_distance = 1000000
 population_size = 160
+population_size = 320
+population_size = 640
+population_size = 1280
+
 num_elites_ga = 5
 num_elites_network = 1
 
 strands_per_cell = 8
 epochs_till_migration = 10
 
-crossover_rate = 0.95
-migration_rate = 0.9
+crossover_rate = 0.9
+migration_rate = 0.3
 mutation_rate = 0.2
 
 network_run_percentage = 0.9
 
-run_time = 1
+FITNESS_CALCULATIONS = 100_000
 
 alpha = 0.9 # simulated annealing
 k = 10 # beam search

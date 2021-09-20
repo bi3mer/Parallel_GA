@@ -1,24 +1,28 @@
 from random import randrange, random, randint, shuffle, uniform
 from math import cos, pi as PI
 
-max_distance = 1000000
 population_size = 160
 # population_size = 320
 # population_size = 640
 # population_size = 1280
 num_elites_ga = 5
-num_elites_network = 1
+num_elites_network = 3
 
 strands_per_cell = 8
+# strands_per_cell = 160
 epochs_till_migration = 10
 
 crossover_rate = 0.95
-migration_rate = 0.9
+migration_rate = 0.3
 mutation_rate = 0.2
 
 network_run_percentage = 0.9
 
-run_time = 0.1
+# run_time = 0.1
+# run_time = 0.15
+run_time = 0.2
+# run_time = 0.3
+# run_time = 0.4
 # run_time = 0.5
 # run_time = 1
 # run_time = 5
@@ -26,7 +30,7 @@ run_time = 0.1
 alpha = 0.9 # simulated annealing
 k = 10 # beam search
 
-strand_size = 10
+strand_size = 20
 
 step_size = 1
 step_size_alpha = 0.9
