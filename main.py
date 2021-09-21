@@ -20,7 +20,7 @@ algorithms = {
     # 'Stochastic Beam Search       ': StochasticBeamSearch(CONFIG),
     # 'Simulated Annealing          ': SimulatedAnnealing(CONFIG),
     # 'Random Search                ': RandomSearch(CONFIG),
-    'Genetic Algorithm            ': GA(CONFIG),
+    # 'Genetic Algorithm            ': GA(CONFIG),
     'Island GA Ring Lattice       ': IslandGA(CONFIG, ring_lattice, None),
     # 'Ring Lattice + SA            ': IslandGA(CONFIG, ring_lattice, simulated_annealing_fine_tuner),
     # 'Ring Lattice + HC            ': IslandGA(CONFIG, ring_lattice, hill_climb_fine_tuner),

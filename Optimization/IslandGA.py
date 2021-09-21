@@ -1,7 +1,7 @@
 from random import seed, random
 from math import inf
 
-from Utility.Stochastic import weighted_sample
+from Utility.Stochastic import weighted_sample_tup
 from Utility.PriorityQueue import insert_tup
 from .Algorithm import Algorithm
 
@@ -10,10 +10,6 @@ class IslandGA(Algorithm):
         super().__init__(config)
         self.network = network
         self.fine_tuner = fine_tuner
-
-    def __get_weights(self, population):
-        weight_total = sum(map(lambda x: x[0], population))
-        return [x[0]/weight_total for x in population]
 
     def run(self, rng_seed=None):
         if seed != None:
@@ -33,9 +29,8 @@ class IslandGA(Algorithm):
                 for v_index, population in enumerate(v):
                     if v_index in edges and random() > self.config.migration_rate:
                         population.sort(key=lambda x: x[0])
-                        weights = self.__get_weights(population)
                         for destination_index in edges[v_index]:
-                            for tup in weighted_sample(population, weights, k=self.config.num_elites_network):
+                            for tup in weighted_sample_tup(population, self.config.num_elites_network):
                                 insert_tup(v[destination_index], tup[1].copy(), tup[0], self.config.strands_per_cell)
 
                 continue
@@ -43,7 +38,6 @@ class IslandGA(Algorithm):
             # regular GA for each population
             for v_index, population in enumerate(v):
                 new_population = []
-                weights = self.__get_weights(population)
 
                 # maintain some number of elites between epochs
                 for i in range(self.config.num_elites_network):
@@ -52,7 +46,7 @@ class IslandGA(Algorithm):
                 # crossover and mutation for the rest
                 population = [strand[1] for strand in population]
                 while len(new_population) < self.config.strands_per_cell:
-                    for strand in self.config.crossover(*weighted_sample(population, weights, k=2)):
+                    for strand in self.config.crossover(*weighted_sample_tup(population, 2)):
                         strand = self.config.mutate(strand)
                         fitness = self.fitness(strand)
                         # new_population.append(w(fitness, strand))

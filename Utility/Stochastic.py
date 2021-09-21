@@ -1,6 +1,7 @@
-from random import random
+from random import uniform
 
 def weighted_sample(array, weights, k):
+    raise NotImplementedError('Not updated for new approach yet')
     assert len(array) == len(weights)
     temp = [(i, w) for i,w in enumerate(weights)]
     indices = []
@@ -25,7 +26,7 @@ def weighted_sample(array, weights, k):
     return [array[i] for i in indices]
 
 
-def weighted_sample_tup(array,  k, reverse=False):
+def weighted_sample_tup(array, k, reverse=False):
     # [(fitness, strand), ...] => array
     if reverse:
         worst_fitness = max(array, key=lambda x: x[0])[0]
@@ -33,13 +34,13 @@ def weighted_sample_tup(array,  k, reverse=False):
 
         return weighted_sample_tup(temp_array, k)
 
+    weight_total = sum(map(lambda x: x[0], array))
     valid_indices = list(range(len(array)))
     indices = []
 
     for _ in range(k):
-        # total_weight = sum(array[i][0] for i in valid_indices)
         current = 0
-        r = random()
+        r = uniform(0, weight_total)
         for index_index, array_index in enumerate(valid_indices):
             current += array[array_index][0]
             if r < current:
