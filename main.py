@@ -1,5 +1,6 @@
 from Utility.ProgressBar import update_progress
 from Utility import Database as db
+from Utility import Tabulate
 from Optimization import * 
 from Networks import *
 import Problems
@@ -17,7 +18,7 @@ genetic_algorithm_fine_tuner = lambda population, time: GA(CONFIG).run(populatio
 
 algorithms = {
     'Hill Climber': HillClimber(CONFIG),
-    'Random Restart Hill Climbing ': RandomRestartHillClimbing(CONFIG),
+    'Random Restart Hill Climbing': RandomRestartHillClimbing(CONFIG),
     'Local Beam Search': LocalBeamSearch(CONFIG),
     'Stochastic Beam Search': StochasticBeamSearch(CONFIG),
     'Simulated Annealing': SimulatedAnnealing(CONFIG),
@@ -56,22 +57,28 @@ for alg_name in algorithms:
     time_taken[alg_name] = alg_times
 
     db.store(CONFIG, alg_name, alg_strands, alg_times, alg_fitness)
+db.save_and_quit()
 
 def mean(l):
     return sum(l) / len(l)
 
-print()
-print()
-print('Algorithm\t\t\tMean Fitness\tMin Fitness\tMax Fitness\tMean Time')
 
 print_data = []
 for title in algorithms:
-    print_data.append((title, mean(results[title]), min(results[title]), max(results[title])))
+    print_data.append((title, mean(results[title]), mean(time_taken[title])))
 
 print_data.sort(key=lambda t: t[1])
 
-for r in print_data:
-    print(f'{r[0]}\t{r[1]:.2f}\t\t{r[2]:.2f}\t\t{r[3]:.2f}\t\t{mean(time_taken[r[0]]):.2f}')
+print()
+print()
+Tabulate.print_markdown_table(
+    ['Algorithm', 'Mean Fitness', 'Mean Time'],
+    print_data
+)
 
 
-db.save_and_quit()
+print()
+Tabulate.print_table(
+    ['Algorithm', 'Mean Fitness', 'Mean Time'],
+    print_data
+)

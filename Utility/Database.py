@@ -1,4 +1,5 @@
 import sqlite3
+import json
 
 con = sqlite3.connect('my_db.db')
 
@@ -31,6 +32,9 @@ con.execute('''
 ''')
 
 def store(config, alg_name, strands, times, fitnesses):
+    assert len(strands) == len(times)
+    assert len(strands) == len(fitnesses)
+
     config_exists_query = f'''
         SELECT * 
         FROM config 
@@ -50,7 +54,8 @@ def store(config, alg_name, strands, times, fitnesses):
     rows = sql_config.fetchall()
 
     if len(rows) == 0:
-        a = f'''
+        # add config to db if it does not already exists
+        con.execute(f'''
             INSERT INTO config 
                 (
                     name,
@@ -77,10 +82,44 @@ def store(config, alg_name, strands, times, fitnesses):
                     {config.strand_size},
                     {config.FITNESS_CALCULATIONS}
                 )
-        '''
-        print(a)
-        print()
-        con.execute(a)
+        ''')
+
+        # get id
+        rows = con.execute(config_exists_query).fetchall()
+
+    assert len(rows) == 1
+    config_id = rows[0][0]
+
+    # if entries with this config already exist, delete them
+    con.execute(f'''
+        DELETE FROM result 
+        WHERE 
+            config_id = {config_id} AND 
+            algorithm = "{alg_name}"
+    ''')
+
+    # store results
+    for i in range(len(times)):
+        con.execute(f'''
+            INSERT INTO result 
+                (
+                    config_id,
+                    time,
+                    strand,
+                    fitness,
+                    algorithm,
+                    order_index
+                )
+            VALUES
+                (
+                    {config_id},
+                    {times[i]},
+                    "{json.dumps(strands[i])}",
+                    {fitnesses[i]},
+                    "{alg_name}",
+                    {i}
+                )
+        ''')
 
     con.commit()
 
