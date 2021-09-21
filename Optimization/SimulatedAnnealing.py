@@ -23,21 +23,13 @@ class SimulatedAnnealing(Algorithm):
 
         return -dfx_mean / log(0.5)
 
-    def run(self, solution=None, run_time=None, rng_seed=None):
+    def run(self,  rng_seed=None):
         if seed != None:
             seed(rng_seed)
 
-        timer = Timer()
-        if run_time == None:
-            timer.start(self.config.run_time)
-        else:
-            timer.start(run_time)
 
-        if solution == None:
-            strand = self.config.create_strand()
-            fitness = self.fitness(strand)
-        else:
-            fitness, strand = solution
+        strand = self.config.create_strand()
+        fitness = self.fitness(strand)
 
         best_strand = strand
         best_fitness = fitness
@@ -46,10 +38,10 @@ class SimulatedAnnealing(Algorithm):
         T = initial_temp
         step_size = self.config.step_size
         
-        while not timer.is_done():
+        while self.fitness_calculations <= self.config.FITNESS_CALCULATIONS:
             # print(step_size)
             if step_size != None:
-                step_size = self.config.step_size * (1 - timer.percent_done())
+                step_size = self.config.step_size * (1 - (self.fitness_calculations / self.config.FITNESS_CALCULATIONS))
 
             new_strand = self.config.get_random_neighbor(strand, step_size=step_size)
             new_fitness = self.fitness(new_strand)

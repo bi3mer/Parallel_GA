@@ -2,14 +2,14 @@ from itertools import repeat
 from random import seed
 
 from Utility.PriorityQueue import insert_tup
-from Utility.Stochastic import weighted_sample
+from Utility.Stochastic import weighted_sample_tup
 from .Algorithm import Algorithm
 
 class GA(Algorithm):
     def __init__(self, config):
         super().__init__(config)
 
-    def run(self, population=None, run_time=None, rng_seed=None):
+    def run(self, population=None, rng_seed=None):
         if seed != None:
             seed(rng_seed)
 
@@ -22,10 +22,6 @@ class GA(Algorithm):
 
         while self.fitness_calculations <= self.config.FITNESS_CALCULATIONS:
             new_population = []
-            # weights = [self.config.max_distance - tup[0] for tup in population]
-            weight_total = sum(map(lambda x: x[0], population))
-            weights = [x[0]/weight_total for x in population]
-
             # maintain some number of elites between epochs
             for i in range(self.config.num_elites_network):
                 new_population.append(population[i])
@@ -33,7 +29,7 @@ class GA(Algorithm):
             # crossover and mutation for the rest
             population = [strand[1] for strand in population]
             while len(new_population) < self.config.population_size:
-                for strand in self.config.crossover(*weighted_sample(population, weights, k=2)):
+                for strand in self.config.crossover(*weighted_sample_tup(population, 2)):
                     strand = self.config.mutate(strand)
                     fitness = self.fitness(strand)
                     insert_tup(new_population, strand, fitness, self.config.population_size)

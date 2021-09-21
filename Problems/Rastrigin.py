@@ -18,14 +18,7 @@ mutation_rate = 0.2
 
 network_run_percentage = 0.9
 
-# run_time = 0.1
-# run_time = 0.15
-run_time = 0.2
-# run_time = 0.3
-# run_time = 0.4
-# run_time = 0.5
-# run_time = 1
-# run_time = 5
+FITNESS_CALCULATIONS = 25_000
 
 alpha = 0.9 # simulated annealing
 k = 10 # beam search

@@ -2,7 +2,6 @@ from random import seed
 from math import inf
 
 from .HillClimber import HillClimber
-from Utility import Timer
 from .Algorithm import Algorithm
 
 class RandomRestartHillClimbing(Algorithm):
@@ -10,22 +9,21 @@ class RandomRestartHillClimbing(Algorithm):
         super().__init__(config)
 
     def run(self, rng_seed=None):
-        if seed != None:
+        if rng_seed != None:
             seed(rng_seed)
-
-        timer = Timer()
-        timer.start(self.config.run_time)
-
+            
         best_strand = None
         best_fitness = inf
 
         hc = HillClimber(self.config)
 
-        while not timer.is_done():
+        while self.fitness_calculations <= self.config.FITNESS_CALCULATIONS:
             strand = self.config.create_strand()
             fitness = self.fitness(strand)
 
-            fitness, strand = hc.run(population=[(fitness, strand)], run_time=timer.time_left())
+            fitness, strand = hc.run(
+                population=[(fitness, strand)], 
+                calculations=self.config.FITNESS_CALCULATIONS - self.fitness_calculations)
 
             if fitness < best_fitness:
                 best_strand = strand
