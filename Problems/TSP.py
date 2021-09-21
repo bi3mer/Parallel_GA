@@ -4,6 +4,8 @@ from random import randrange, random, randint
 from os.path import join, expanduser
 from random import shuffle
 
+NAME = 'TSP'
+
 cities = TSPLib.load(join(expanduser('~'), 'data', 'TSPLib', 'bayg29.tsp'))
 strand_size = len(list(cities.get_nodes()))
 

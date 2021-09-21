@@ -1,6 +1,8 @@
 from random import randrange, random, randint, shuffle, uniform
 from math import cos, pi as PI
 
+NAME = 'Rastrigin'
+
 population_size = 160
 # population_size = 320
 # population_size = 640
