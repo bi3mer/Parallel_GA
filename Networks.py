@@ -19,6 +19,17 @@ def __initialize_vertice_population(config):
 def empty(config):
     return __initialize_vertice_population(config), {}
 
+def fully_connected(config):
+    vertices = __initialize_vertice_population(config)
+    edges = {}
+    for i in range(len(vertices)):
+        edges[i] = []
+        for j in range(len(vertices)):
+            if i != j:
+                edges[i].append(j)
+
+    return vertices, edges
+
 def ring_lattice(config):
     vertices = __initialize_vertice_population(config)
 

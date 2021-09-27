@@ -3,9 +3,9 @@ from math import cos, pi as PI
 
 NAME = 'Rastrigin'
 
-population_size = 160
+# population_size = 160
 # population_size = 320
-# population_size = 640
+population_size = 640
 # population_size = 1280
 num_elites_ga = 5
 num_elites_network = 3
@@ -20,12 +20,12 @@ mutation_rate = 0.2
 
 network_run_percentage = 0.9
 
-FITNESS_CALCULATIONS = 25_000
+FITNESS_CALCULATIONS = 30_000
 
 alpha = 0.9 # simulated annealing
 k = 10 # beam search
 
-strand_size = 20
+strand_size = 60
 
 step_size = 1
 step_size_alpha = 0.9

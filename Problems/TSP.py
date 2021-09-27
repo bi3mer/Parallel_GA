@@ -6,19 +6,19 @@ from random import shuffle
 
 NAME = 'TSP'
 
-cities = TSPLib.load(join(expanduser('~'), 'data', 'TSPLib', 'bayg29.tsp'))
+cities = TSPLib.load(join(expanduser('~'), 'data', 'TSPLib', 'att48.tsp'))
 strand_size = len(list(cities.get_nodes()))
 
-population_size = 160
+# population_size = 160
 population_size = 320
-population_size = 640
-population_size = 1280
+# population_size = 640
+# population_size = 1280
 
 num_elites_ga = 5
 num_elites_network = 1
 
 strands_per_cell = 8
-epochs_till_migration = 10
+epochs_till_migration = 2
 
 crossover_rate = 0.9
 migration_rate = 0.3
@@ -26,7 +26,7 @@ mutation_rate = 0.2
 
 network_run_percentage = 0.9
 
-FITNESS_CALCULATIONS = 25_000
+FITNESS_CALCULATIONS = 10_000
 
 alpha = 0.9 # simulated annealing
 k = 10 # beam search
@@ -103,6 +103,7 @@ Shortest paths can be found here:
     berlin52  : 7542
     pr76      : 108159
     lin105    : 14379
+    gr229     : 134602
     dsj1000   : 18659688
     brd14051  : 469385
 

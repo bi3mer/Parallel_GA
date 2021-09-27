@@ -1,3 +1,5 @@
+from collections import namedtuple
+
 import sqlite3
 import json
 
@@ -14,8 +16,11 @@ con.execute('''
         crossover_rate FLOAT NOT NULL,
         mutation_rate FLOAT NOT NULL,
         migration_rate FLOAT NOT NULL,
+        epochs_till_migration INT NOT NULL,
         strand_size INT NOT NULL,
-        fitness_calculations FLOAT NOT NULL
+        fitness_calculations FLOAT NOT NULL,
+        runs INT NOT NULL,
+        algorithm TEXT NOT NULL
     );
 ''')
 
@@ -26,16 +31,38 @@ con.execute('''
         time FLOAT NOT NULL,
         strand TEXT NOT NULL,
         fitness FLOAT NOT NULL,
-        algorithm TEXT NOT NULL,
         order_index INT NOT NULL
     );
 ''')
 
-def store(config, alg_name, strands, times, fitnesses):
-    assert len(strands) == len(times)
-    assert len(strands) == len(fitnesses)
+Config = namedtuple('Config', [
+    'config_id',
+    'name',
+    'population_size',
+    'num_elites_ga',
+    'num_elites_network',
+    'strands_per_cell',
+    'crossover_rate',
+    'mutation_rate',
+    'migration_rate',
+    'epochs_till_migration',
+    'strand_size',
+    'fitness_calculations',
+    'runs',
+    'algorithm'
+])
 
-    config_exists_query = f'''
+Result = namedtuple('Result', [
+    'result_id',
+    'config_id',
+    'time',
+    'strand',
+    'fitness',
+    'order_index'
+])
+
+def insert_config_slash_exists(config, runs, alg_name):
+    sql_config = con.execute(f'''
         SELECT * 
         FROM config 
         WHERE
@@ -47,10 +74,12 @@ def store(config, alg_name, strands, times, fitnesses):
             crossover_rate= {config.crossover_rate} AND
             mutation_rate = {config.mutation_rate} AND
             migration_rate = {config.migration_rate} AND
+            epochs_till_migration = {config.epochs_till_migration} AND
             strand_size = {config.strand_size} AND
-            fitness_calculations = {config.FITNESS_CALCULATIONS}
-    '''
-    sql_config = con.execute(config_exists_query)
+            fitness_calculations = {config.FITNESS_CALCULATIONS} AND 
+            runs = {runs} AND
+            algorithm = "{alg_name}"
+    ''')
     rows = sql_config.fetchall()
 
     if len(rows) == 0:
@@ -66,8 +95,11 @@ def store(config, alg_name, strands, times, fitnesses):
                     crossover_rate,
                     mutation_rate,
                     migration_rate,
+                    epochs_till_migration,
                     strand_size ,
-                    fitness_calculations
+                    fitness_calculations,
+                    runs,
+                    algorithm
                 )
             VALUES
                 (
@@ -79,24 +111,46 @@ def store(config, alg_name, strands, times, fitnesses):
                     {config.crossover_rate},
                     {config.mutation_rate},
                     {config.migration_rate},
+                    {config.epochs_till_migration},
                     {config.strand_size},
-                    {config.FITNESS_CALCULATIONS}
+                    {config.FITNESS_CALCULATIONS},
+                    {runs},
+                    "{alg_name}"
                 )
         ''')
 
-        # get id
-        rows = con.execute(config_exists_query).fetchall()
+        con.commit()
+        return False
+    else:
+        return True
+    
+def store(config, runs, alg_name, strands, times, fitnesses):
+    assert len(strands) == len(times)
+    assert len(strands) == len(fitnesses)
+
+    # get config_id
+    sql_config = con.execute(f'''
+        SELECT * 
+        FROM config 
+        WHERE
+            name = "{config.NAME}" AND
+            population_size = {config.population_size} AND
+            num_elites_ga  = {config.num_elites_ga} AND
+            num_elites_network = {config.num_elites_network} AND
+            strands_per_cell= {config.strands_per_cell} AND
+            crossover_rate= {config.crossover_rate} AND
+            mutation_rate = {config.mutation_rate} AND
+            migration_rate = {config.migration_rate} AND
+            epochs_till_migration = {config.epochs_till_migration} AND
+            strand_size = {config.strand_size} AND
+            fitness_calculations = {config.FITNESS_CALCULATIONS} AND
+            runs = {runs} AND
+            algorithm = "{alg_name}"
+    ''')
+    rows = sql_config.fetchall()
 
     assert len(rows) == 1
     config_id = rows[0][0]
-
-    # if entries with this config already exist, delete them
-    con.execute(f'''
-        DELETE FROM result 
-        WHERE 
-            config_id = {config_id} AND 
-            algorithm = "{alg_name}"
-    ''')
 
     # store results
     for i in range(len(times)):
@@ -107,7 +161,6 @@ def store(config, alg_name, strands, times, fitnesses):
                     time,
                     strand,
                     fitness,
-                    algorithm,
                     order_index
                 )
             VALUES
@@ -116,7 +169,6 @@ def store(config, alg_name, strands, times, fitnesses):
                     {times[i]},
                     "{json.dumps(strands[i])}",
                     {fitnesses[i]},
-                    "{alg_name}",
                     {i}
                 )
         ''')
