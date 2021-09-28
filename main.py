@@ -1,10 +1,12 @@
 from Utility.ProgressBar import update_progress
+from Utility.Iterator import float_range
 from Utility import Database as db
 from Utility import Tabulate
 from Optimization import * 
 from Networks import *
 import Problems
 
+from itertools import product
 from time import time
 from gc import collect as gc_collect
 
@@ -29,11 +31,21 @@ algorithms = {
     'Island GA Full': IslandGA(CONFIG, fully_connected),
 }
 
-TOTAL = 50
-for index in range(TOTAL):
-    print(f'\n{index+1}/{TOTAL}')
-    CONFIG.FITNESS_CALCULATIONS = 1000 * (index + 1)
+migration_rates = list(float_range(0.01,1.01,0.01))
+epochs_till_migration = list(range(1,15))
+
+migration_rates = list(float_range(0.01,0.03,0.01))
+epochs_till_migration = list(range(2,3))
+
+for m_rate, e_rate in product(migration_rates, epochs_till_migration):
+    # print(f'\n{index+1}/{TOTAL}')
+    # CONFIG.FITNESS_CALCULATIONS = 1000 * (index + 1)
     # CONFIG.epochs_till_migration = index + 2
+
+    print(f'{m_rate}, {e_rate}')
+
+    CONFIG.migration_rate = m_rate
+    CONFIG.epochs_till_migration = e_rate
 
     results = {}
     time_taken = {}
