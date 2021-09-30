@@ -18,24 +18,21 @@ algorithms = {
     # 'Random Restart Hill Climbing': RandomRestartHillClimbing(CONFIG),
     # 'Local Beam Search': LocalBeamSearch(CONFIG),
     # 'Stochastic Beam Search': StochasticBeamSearch(CONFIG),
-    'Simulated Annealing': SimulatedAnnealing(CONFIG),
+    # 'Simulated Annealing': SimulatedAnnealing(CONFIG),
     # 'Random Search': RandomSearch(CONFIG),
-    'Genetic Algorithm': GA(CONFIG),
+    # 'Genetic Algorithm': GA(CONFIG),
     'Island GA Ring Lattice': IslandGA(CONFIG, ring_lattice),
     'Island GA Cell': IslandGA(CONFIG, cell),
     'Island GA Hierarchy': IslandGA(CONFIG, hier),
     'Island GA Caveman': IslandGA(CONFIG, caveman,),
     'Island GA Rewired Caveman': IslandGA(CONFIG, rewired_caveman),
     'Island GA Watts Strogatz': IslandGA(CONFIG, watts_strogatz),
-    'Island GA Empty': IslandGA(CONFIG, empty),
+#    'Island GA Empty': IslandGA(CONFIG, empty),
     'Island GA Full': IslandGA(CONFIG, fully_connected),
 }
 
-migration_rates = list(float_range(0.01,1.01,0.01))
-epochs_till_migration = list(range(1,15))
-
-migration_rates = list(float_range(0.01,0.03,0.01))
-epochs_till_migration = list(range(2,3))
+migration_rates = list(float_range(0.01,1.01,0.02))
+epochs_till_migration = list(range(2,15))
 
 for m_rate, e_rate in product(migration_rates, epochs_till_migration):
     # print(f'\n{index+1}/{TOTAL}')
