@@ -27,7 +27,7 @@ class IslandGA(Algorithm):
             if epoch % self.config.epochs_till_migration == 0:
                 for v_index, population in enumerate(v):
                     if v_index in edges and random() > self.config.migration_rate:
-                        population.sort(key=lambda x: x[0])
+                        population.sort(key=lambda x: x[0]) # I don't think that this is necessary
                         for destination_index in edges[v_index]:
                             for tup in weighted_sample_tup(population, self.config.num_elites_network):
                                 insert_tup(v[destination_index], tup[1].copy(), tup[0], self.config.strands_per_cell)

@@ -1,10 +1,14 @@
 from .Algorithm import Algorithm
+from random import seed
 
 class HillClimber(Algorithm):
     def __init__(self, config):
         super().__init__(config)
 
     def run(self, population=None, calculations=None, rng_seed=None):
+        if rng_seed != None:
+            seed(rng_seed)
+
         if population == None:
             strand = self.config.create_strand()
             fitness = self.fitness(strand)
@@ -28,7 +32,7 @@ class HillClimber(Algorithm):
                     break # greedy implementation
 
             if step_size != None and not update_made and step_size > 1e-6:
-                step_size = self.config.step_size * (1 - (self.fitness_calculations / self.config.FITNESS_CALCULATIONS))
+                step_size *= self.config.alpha
                 update_made = True
 
         return fitness, strand

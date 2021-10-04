@@ -18,12 +18,12 @@ crossover_rate = 0.95
 migration_rate = 0.3
 mutation_rate = 0.2
 
-FITNESS_CALCULATIONS = 30_000
+FITNESS_CALCULATIONS = 100_000
 
 alpha = 0.9 # simulated annealing
 k = 10 # beam search
 
-strand_size = 60
+strand_size = 20
 
 step_size = 1
 step_size_alpha = 0.9
@@ -42,6 +42,7 @@ def fitness(strand):
         fit += val**2 - (10 * cos(two_pi * val))
 
     return fit
+    # return sum(x**2 for x in strand)
 
 def mutate(strand):
     for i in range(strand_size):
@@ -62,11 +63,11 @@ def crossover(p_1, p_2):
 def get_neighbors(strand, step_size=None):
     for i in range(strand_size):
         new = strand.copy()
-        new[i] = max(5.12, new[i] + step_size)
+        new[i] = min(5.12, new[i] + step_size)
         yield new
 
         new = strand.copy()
-        new[i] = min(-5.12, new[i] - step_size)
+        new[i] = max(-5.12, new[i] - step_size)
         yield new
 
 def get_random_neighbor(strand, step_size=None):
@@ -74,9 +75,9 @@ def get_random_neighbor(strand, step_size=None):
     index = randint(0, strand_size - 1)
     
     if random() < 0.5:
-        new[index] = max(5.12, new[index] + step_size)
+        new[index] = min(5.12, new[index] + step_size)
     else:
-        new[index] = min(-5.12, new[index] - step_size)
+        new[index] = max(-5.12, new[index] - step_size)
 
     return new
 
