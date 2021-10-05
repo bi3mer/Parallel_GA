@@ -14,43 +14,43 @@ RUNS = 10
 CONFIG = Problems.Rastrigin
 
 algorithms = {
-    'Hill Climber': HillClimber(CONFIG),
+    # 'Hill Climber': HillClimber(CONFIG),
     # 'Random Restart Hill Climbing': RandomRestartHillClimbing(CONFIG),
     # 'Local Beam Search': LocalBeamSearch(CONFIG),
     # 'Stochastic Beam Search': StochasticBeamSearch(CONFIG),
-    'Simulated Annealing': SimulatedAnnealing(CONFIG),
+    # 'Simulated Annealing': SimulatedAnnealing(CONFIG),
     # 'Random Search': RandomSearch(CONFIG),
     # 'Genetic Algorithm': GA(CONFIG),
-    # 'Island GA Ring Lattice': IslandGA(CONFIG, ring_lattice),
-    # 'Island GA Cell': IslandGA(CONFIG, cell),
-    # 'Island GA Hierarchy': IslandGA(CONFIG, hier),
-    # 'Island GA Caveman': IslandGA(CONFIG, caveman,),
-    # 'Island GA Rewired Caveman': IslandGA(CONFIG, rewired_caveman),
-    # 'Island GA Watts Strogatz': IslandGA(CONFIG, watts_strogatz),
-#    'Island GA Empty': IslandGA(CONFIG, empty),
+    'Island GA Ring Lattice': IslandGA(CONFIG, ring_lattice),
+    'Island GA Cell': IslandGA(CONFIG, cell),
+    'Island GA Hierarchy': IslandGA(CONFIG, hier),
+    'Island GA Caveman': IslandGA(CONFIG, caveman,),
+    'Island GA Rewired Caveman': IslandGA(CONFIG, rewired_caveman),
+    'Island GA Watts Strogatz': IslandGA(CONFIG, watts_strogatz),
+    'Island GA Empty': IslandGA(CONFIG, empty),
     'Island GA Full': IslandGA(CONFIG, fully_connected),
 }
 
-# migration_rates = list(float_range(0.01,1.01,0.02))
-# epochs_till_migration = list(range(2,15))
+migration_rates = list(float_range(0.01,1.01,0.02))
+epochs_till_migration = list(range(2,15))
 
-# for m_rate, e_rate in product(migration_rates, epochs_till_migration):
-for _ in range(1):
-    # print(f'\n{index+1}/{TOTAL}')
-    # CONFIG.FITNESS_CALCULATIONS = 1000 * (index + 1)
+for m_rate, e_rate in product(migration_rates, epochs_till_migration):
+# for index in range(50):
+    # print(f'\n{index+1}/{50}')
+    # CONFIG.FITNESS_CALCULATIONS = 10_000 + 1000 * (index + 1)
     # CONFIG.epochs_till_migration = index + 2
 
-    # print(f'{m_rate}, {e_rate}')
+    print(f'{m_rate}, {e_rate}')
 
-    # CONFIG.migration_rate = m_rate
-    # CONFIG.epochs_till_migration = e_rate
+    CONFIG.migration_rate = m_rate
+    CONFIG.epochs_till_migration = e_rate
 
     results = {}
     time_taken = {}
     for alg_name in algorithms:
-        # if db.insert_config_slash_exists(CONFIG, RUNS, alg_name):
-        #     print(f'{alg_name} already calculated.')
-        #     continue
+        if db.insert_config_slash_exists(CONFIG, RUNS, alg_name):
+            print(f'{alg_name} already calculated.')
+            continue
 
         print(alg_name)
 
@@ -72,11 +72,10 @@ for _ in range(1):
         results[alg_name] = alg_fitness
         time_taken[alg_name] = alg_times
 
-        # db.store(CONFIG, RUNS, alg_name, alg_strands, alg_times, alg_fitness)
+        db.store(CONFIG, RUNS, alg_name, alg_strands, alg_times, alg_fitness)
 
     def mean(l):
         return sum(l) / len(l)
-
 
     print_data = []
     for title in algorithms:
@@ -94,11 +93,10 @@ for _ in range(1):
         print_data
     )
 
-
     print()
     Tabulate.print_table(
         ['Algorithm', 'Mean Fitness', 'Mean Time'],
         print_data
     )
 
-# db.save_and_quit()
+db.save_and_quit()

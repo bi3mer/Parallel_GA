@@ -18,7 +18,7 @@ crossover_rate = 0.95
 migration_rate = 0.3
 mutation_rate = 0.2
 
-FITNESS_CALCULATIONS = 100_000
+FITNESS_CALCULATIONS = 50_000
 
 alpha = 0.9 # simulated annealing
 k = 10 # beam search

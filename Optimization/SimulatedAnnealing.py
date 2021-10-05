@@ -27,41 +27,32 @@ class SimulatedAnnealing(Algorithm):
         if seed != None:
             seed(rng_seed)
 
-
         strand = self.config.create_strand()
         fitness = self.fitness(strand)
 
         best_strand = strand
         best_fitness = fitness
 
-        initial_temp = self.__initial_temp(fitness)
-        T = initial_temp
+        T = self.__initial_temp(fitness)
         step_size = self.config.step_size
         
         while self.fitness_calculations <= self.config.FITNESS_CALCULATIONS:
-            # print(step_size)
-            if step_size != None:
-                step_size = self.config.step_size * (1 - (self.fitness_calculations / self.config.FITNESS_CALCULATIONS))
-
             new_strand = self.config.get_random_neighbor(strand, step_size=step_size)
             new_fitness = self.fitness(new_strand)
 
             # Always hill climb if valid
-            delta_f = new_fitness - fitness 
-            if delta_f < 0:
+            if  new_fitness <= fitness:
                 strand = new_strand
                 fitness = new_fitness
-                T *= self.config.alpha
 
                 if fitness < best_fitness:
                     best_strand = strand
                     best_fitness = fitness
-                continue
-            
-            # Anneal if we can
-            if random() < exp(-delta_f / T):
-                strand = new_strand
-                fitness = new_fitness
-                T *= self.config.alpha
+            elif random() < exp(-(new_fitness - fitness) / T):
+                    strand = new_strand
+                    fitness = new_fitness
+                    T *= self.config.alpha
+            else:
+                step_size *= 0.9 # TODO: improve this
 
         return best_fitness, best_strand
