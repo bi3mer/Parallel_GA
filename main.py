@@ -48,7 +48,7 @@ migration_rates = list(float_range(0.01,1.01,0.02))
 epochs_till_migration = list(range(2,15))
 
 # for m_rate, e_rate in product(migration_rates, epochs_till_migration):
-for index in range(1):
+for index in range(50):
     print(f'\n{index+1}/{50}')
     CONFIG.FITNESS_CALCULATIONS = 10_000 + 1000 * (index + 1)
     # CONFIG.epochs_till_migration = index + 2
