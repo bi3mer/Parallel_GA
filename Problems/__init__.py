@@ -1,3 +1,3 @@
-from . import GoldbergOrder3Deception
+from . import BinaryAlpine
 from . import Rastrigin
 from . import TSP

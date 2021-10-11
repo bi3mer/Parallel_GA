@@ -3,6 +3,7 @@ from collections import namedtuple
 import sqlite3
 import json
 
+should_store = False
 con = sqlite3.connect('my_db.db')
 
 con.execute('''
@@ -62,6 +63,9 @@ Result = namedtuple('Result', [
 ])
 
 def insert_config_slash_exists(config, runs, alg_name):
+    if not should_store:
+        return
+
     sql_config = con.execute(f'''
         SELECT * 
         FROM config 
@@ -125,6 +129,9 @@ def insert_config_slash_exists(config, runs, alg_name):
         return True
     
 def store(config, runs, alg_name, strands, times, fitnesses):
+    if not should_store:
+        return
+
     assert len(strands) == len(times)
     assert len(strands) == len(fitnesses)
 
@@ -176,5 +183,8 @@ def store(config, runs, alg_name, strands, times, fitnesses):
     con.commit()
 
 def save_and_quit():
+    if not should_store:
+        return
+
     con.commit()
     con.close()

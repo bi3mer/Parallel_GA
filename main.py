@@ -9,18 +9,31 @@ import Problems
 from itertools import product
 from time import time
 from gc import collect as gc_collect
+import argparse
+
+
+parser = argparse.ArgumentParser(description='GA Benchmarker')
+parser.add_argument('--store', action='store_true', help='store results to database')
+args = parser.parse_args()
+
+args.store = False
+if args.store:
+    print('Results will be stored from this run.')
+else:
+    print('Results not stored for this run.')
+db.should_store = args.store
 
 RUNS = 10
-CONFIG = Problems.Rastrigin
+CONFIG = Problems.BinaryAlpine
 
 algorithms = {
     # 'Hill Climber': HillClimber(CONFIG),
     # 'Random Restart Hill Climbing': RandomRestartHillClimbing(CONFIG),
     # 'Local Beam Search': LocalBeamSearch(CONFIG),
     # 'Stochastic Beam Search': StochasticBeamSearch(CONFIG),
-    # 'Simulated Annealing': SimulatedAnnealing(CONFIG),
+    'Simulated Annealing': SimulatedAnnealing(CONFIG),
     # 'Random Search': RandomSearch(CONFIG),
-    # 'Genetic Algorithm': GA(CONFIG),
+    'Genetic Algorithm': GA(CONFIG),
     'Island GA Ring Lattice': IslandGA(CONFIG, ring_lattice),
     'Island GA Cell': IslandGA(CONFIG, cell),
     'Island GA Hierarchy': IslandGA(CONFIG, hier),
@@ -34,16 +47,16 @@ algorithms = {
 migration_rates = list(float_range(0.01,1.01,0.02))
 epochs_till_migration = list(range(2,15))
 
-for m_rate, e_rate in product(migration_rates, epochs_till_migration):
-# for index in range(50):
-    # print(f'\n{index+1}/{50}')
-    # CONFIG.FITNESS_CALCULATIONS = 10_000 + 1000 * (index + 1)
+# for m_rate, e_rate in product(migration_rates, epochs_till_migration):
+for index in range(1):
+    print(f'\n{index+1}/{50}')
+    CONFIG.FITNESS_CALCULATIONS = 10_000 + 1000 * (index + 1)
     # CONFIG.epochs_till_migration = index + 2
 
-    print(f'{m_rate}, {e_rate}')
+    # print(f'{m_rate}, {e_rate}')
 
-    CONFIG.migration_rate = m_rate
-    CONFIG.epochs_till_migration = e_rate
+    # CONFIG.migration_rate = m_rate
+    # CONFIG.epochs_till_migration = e_rate
 
     results = {}
     time_taken = {}

@@ -27,10 +27,9 @@ class GA(Algorithm):
                 new_population.append(population[i])
 
             # crossover and mutation for the rest
-            population = [strand[1] for strand in population]
             while len(new_population) < self.config.population_size:
                 for strand in self.config.crossover(*weighted_sample_tup(population, 2)):
-                    strand = self.config.mutate(strand)
+                    strand = self.config.mutate(strand[1])
                     fitness = self.fitness(strand)
                     insert_tup(new_population, strand, fitness, self.config.population_size)
 

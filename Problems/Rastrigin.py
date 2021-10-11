@@ -31,8 +31,7 @@ step_size_alpha = 0.9
 two_pi = 2 * PI
 
 def create_strand():
-    strand = [uniform(-5.12, 5.12) for _ in range(strand_size)]
-    return strand
+    return [uniform(-5.12, 5.12) for _ in range(strand_size)]
 
 def fitness(strand):
     assert len(strand) == strand_size
