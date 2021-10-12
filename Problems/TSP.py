@@ -12,7 +12,7 @@ strand_size = len(list(cities.get_nodes()))
 # population_size = 160
 population_size = 320
 # population_size = 640
-# population_size = 1280
+population_size = 1280
 
 num_elites_ga = 5
 num_elites_network = 1

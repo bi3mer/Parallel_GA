@@ -183,8 +183,5 @@ def store(config, runs, alg_name, strands, times, fitnesses):
     con.commit()
 
 def save_and_quit():
-    if not should_store:
-        return
-
     con.commit()
     con.close()

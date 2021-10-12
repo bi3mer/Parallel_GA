@@ -26,7 +26,7 @@ class IslandGA(Algorithm):
             # print(epoch % self.config.epochs_till_migration)
             if epoch % self.config.epochs_till_migration == 0:
                 for v_index, population in enumerate(v):
-                    if v_index in edges and random() > self.config.migration_rate:
+                    if v_index in edges and random() < self.config.migration_rate:
                         population.sort(key=lambda x: x[0]) # I don't think that this is necessary
                         for destination_index in edges[v_index]:
                             for tup in weighted_sample_tup(population, self.config.num_elites_network):
@@ -45,14 +45,14 @@ class IslandGA(Algorithm):
 
                 # crossover and mutation for the rest
                 while len(new_population) < self.config.strands_per_cell:
-                    for strand in self.config.crossover(*weighted_sample_tup(population, 2)):
-                        strand = self.config.mutate(strand[1])
+                    strands = map(lambda a: a[1], weighted_sample_tup(population, 2))
+                    for strand in self.config.crossover(*strands):
+                        strand = self.config.mutate(strand)
                         fitness = self.fitness(strand)
                         # new_population.append((fitness, strand))
                         insert_tup(new_population, strand, fitness, self.config.strands_per_cell)
                 
                 v[v_index] = new_population
-                
 
         best_strand = None
         best_fitness = inf

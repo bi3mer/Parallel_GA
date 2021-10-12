@@ -1,9 +1,8 @@
-from random import randrange, random, randint, shuffle, uniform
-from math import cos, pi as PI
+from random import randrange, random, randint, uniform
 
-NAME = 'Rastrigin'
+NAME = 'Rosenbrock'
 
-population_size = 640
+population_size = 1280
 num_elites_ga = 5
 num_elites_network = 3
 
@@ -15,7 +14,7 @@ crossover_rate = 0.95
 migration_rate = 0.3
 mutation_rate = 0.2
 
-FITNESS_CALCULATIONS = 50_000
+FITNESS_CALCULATIONS = 250_000
 
 alpha = 0.9 # simulated annealing
 k = 10 # beam search
@@ -25,25 +24,19 @@ strand_size = 20
 step_size = 1
 step_size_alpha = 0.9
 
-two_pi = 2 * PI
+bounds = [-100.0,100.0]
 
 def create_strand():
-    return [uniform(-5.12, 5.12) for _ in range(strand_size)]
+    return [uniform(*bounds) for _ in range(strand_size)]
 
 def fitness(strand):
     assert len(strand) == strand_size
-
-    fit = 10 * strand_size
-    for val in strand:
-        fit += val**2 - (10 * cos(two_pi * val))
-
-    return fit
-    # return sum(x**2 for x in strand)
+    return sum(100*(strand[i+1] - strand[i]**2)**2 + (strand[i] - 1)**2 for i in range(strand_size - 1))
 
 def mutate(strand):
     for i in range(strand_size):
         if random() < mutation_rate:
-            strand[i] = uniform(-5.12, 5.12)
+            strand[i] = uniform(*bounds)
         
     return strand
 
@@ -59,11 +52,11 @@ def crossover(p_1, p_2):
 def get_neighbors(strand, step_size=None):
     for i in range(strand_size):
         new = strand.copy()
-        new[i] = min(5.12, new[i] + step_size)
+        new[i] = min(bounds[1], new[i] + step_size)
         yield new
 
         new = strand.copy()
-        new[i] = max(-5.12, new[i] - step_size)
+        new[i] = max(bounds[0], new[i] - step_size)
         yield new
 
 def get_random_neighbor(strand, step_size=None):
@@ -71,9 +64,9 @@ def get_random_neighbor(strand, step_size=None):
     index = randint(0, strand_size - 1)
     
     if random() < 0.5:
-        new[index] = min(5.12, new[index] + step_size)
+        new[index] = min(bounds[1], new[index] + step_size)
     else:
-        new[index] = max(-5.12, new[index] - step_size)
+        new[index] = max(bounds[0], new[index] - step_size)
 
     return new
 

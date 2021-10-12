@@ -5,4 +5,6 @@ from . import PriorityQueue
 from . import Stochastic
 from . import Database
 from . import Iterator
+from . import Types
+
 from .Timer import Timer

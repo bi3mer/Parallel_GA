@@ -19,11 +19,10 @@ FITNESS_CALCULATIONS = 10_000
 alpha = 0.9 # simulated annealing
 k = 10 # beam search
 
-strand_size = 50
+strand_size = 20
 bits = 16 # 16 is actually 32 bits (16*2)
 
 bounds = [-10, 10]
-
 
 step_size = 1
 step_size_alpha = 0.9
@@ -38,23 +37,19 @@ def decode(strand):
     return bounds[0] + (integer/largest) * (bounds[1] - bounds[0])
 
 def create_strand():
-    return [[randint(0,1) for __ in range(16)] for _ in range(strand_size)]
+    return [randint(0,1) for _ in range(strand_size*bits)]
 
 def fitness(strand):
-    assert len(strand) == strand_size
-    return sum(abs(x*sin(x) + 0.1*x) for x in map(lambda binary: decode(binary), strand))
-
-def mutate(strand):
+    f = 0
     for i in range(strand_size):
-        for j in range(bits):
-            if random() < mutation_rate:
-                strand[i][j] = 1 - strand[i][j]
-        
-    return strand
+        x = decode(strand[i*bits:(i+1)*bits])
+        f += abs(x*sin(x) + 0.1*x)
+
+    return f
 
 def crossover(p_1, p_2):
     if random() < crossover_rate:
-        cross_over_point = randrange(0, strand_size)
+        cross_over_point = randrange(0, len(p_1))
         
         return p_1[:cross_over_point] + p_2[cross_over_point:],\
                p_2[:cross_over_point] + p_1[cross_over_point:],
@@ -62,17 +57,22 @@ def crossover(p_1, p_2):
     return p_1, p_2
 
 def get_neighbors(strand, step_size=None):
-    for i in range(strand_size):
-        for j in range(bits):
-            new = strand.copy()
-            new[i][j] = 1 - new[i][j]
-            yield new
+    indexes = list(range(len(strand)))
+    shuffle(indexes)
+
+    for i in indexes:
+        new = strand.copy()
+        new[i] = 1 - new[i]
+        yield new
 
 def get_random_neighbor(strand, step_size=None):
     new = strand.copy()
-    i = randint(0, strand_size - 1)
-    j = randint(0, bits - 1)
-    new[i][j] = 1 - new[i][j]
+    i = randint(0, len(strand) - 1)
+    new[i] = 1 - new[i]
 
     return new
 
+def mutate(strand):
+    if random() < mutation_rate:
+        return get_random_neighbor(strand)
+    return strand
