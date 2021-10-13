@@ -1,9 +1,9 @@
 from random import randrange, random, randint, shuffle, uniform
 from math import sin
 
-NAME = 'Alpine'
+NAME = 'Binary Sphere'
 
-population_size = 1280
+population_size = 640
 num_elites_ga = 5
 num_elites_network = 3
 
@@ -14,15 +14,15 @@ crossover_rate = 0.95
 migration_rate = 0.01
 mutation_rate = 0.2
 
-FITNESS_CALCULATIONS = 10_000
+FITNESS_CALCULATIONS = 20_000
 
 alpha = 0.9 # simulated annealing
 k = 10 # beam search
 
-strand_size = 20
+strand_size = 50
 bits = 16 # 16 is actually 32 bits (16*2)
 
-bounds = [-32.0, 32.0]
+bounds = [-10, 10]
 
 step_size = 1
 step_size_alpha = 0.9
@@ -40,12 +40,7 @@ def create_strand():
     return [randint(0,1) for _ in range(strand_size*bits)]
 
 def fitness(strand):
-    f = 0
-    for i in range(strand_size):
-        x = decode(strand[i*bits:(i+1)*bits])
-        f += abs(x*sin(x) + 0.1*x)
-
-    return f
+    return sum(decode(strand[i*bits:(i+1)*bits])**2 for i in range(strand_size))
 
 def crossover(p_1, p_2):
     if random() < crossover_rate:

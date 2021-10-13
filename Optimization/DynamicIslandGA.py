@@ -1,15 +1,14 @@
 from random import randint, seed
 from itertools import repeat
 from math import inf
-from collections import namedtuple
 
 from Utility.Stochastic import weighted_sample_tup
 from Utility.PriorityQueue import insert_tup
-from Utility.Types import AvgFitnessPopulation
+from Utility.Math import get_slope_and_intercept
 from .Algorithm import Algorithm
 
 
-STRANDS_PER_CELL = 2
+STRANDS_PER_CELL = 8
 
 class DynamicIslandGA(Algorithm):
     def __init__(self, config):
@@ -21,9 +20,9 @@ class DynamicIslandGA(Algorithm):
             strand = self.config.create_strand()
             insert_tup(population, strand, self.fitness(strand), STRANDS_PER_CELL)
 
-        return AvgFitnessPopulation(sum(a[0] for a in population) / STRANDS_PER_CELL, population)
+        return population
 
-    def __average_change(self, strand_fitness, strand, num_tested=100):
+    def __average_percent_change(self, strand_fitness, strand, num_tested=100):
         '''
         Modified version of:
         https://github.com/fillipe-gsm/python-tsp/blob/master/python_tsp/heuristics/simulated_annealing.py
@@ -31,17 +30,21 @@ class DynamicIslandGA(Algorithm):
         fitness_change_sum = 0
         for _ in repeat(None, num_tested):
             new_strand = self.config.get_random_neighbor(strand, step_size=self.config.step_size)
-            fitness_change_sum += abs(self.fitness(new_strand) - strand_fitness)
+            fitness_change_sum += abs(self.fitness(new_strand) / strand_fitness)
 
         return fitness_change_sum / num_tested
 
-    def __run_ga(self, avg_fitness, population, delta):
+    def __run_ga(self, population, delta):
         update_made = False
+        fitnesses = []
+        x = []
+        current_x = 0
+        
         while self.fitness_calculations <= self.config.FITNESS_CALCULATIONS:
             new_population = []
-            # maintain some number of elites between epochs
-            for i in range(self.config.num_elites_network):
-                new_population.append(population[i])
+
+            # maintain one eliete between epochs
+            new_population.append(population[0])
 
             # crossover and mutation for the rest
             while len(new_population) < STRANDS_PER_CELL:
@@ -52,17 +55,23 @@ class DynamicIslandGA(Algorithm):
                     insert_tup(new_population, strand, fitness, STRANDS_PER_CELL)
 
             population = new_population
-            new_avg_fitness = sum(a[0] for a in population) / STRANDS_PER_CELL
 
             # break out if some level of convergence has occurred 
-            if abs(avg_fitness - new_avg_fitness) < delta:
-                avg_fitness = new_avg_fitness
-                break
+            if len(x) > 3:
+                # slope, _ = get_slope_and_intercept(x[-2:], fitnesses[-2:])
+                slope = abs(fitnesses[-1] / fitnesses[-2])
+                if abs(slope) < delta:
+                    update_made = True
+                else:
+                    break
+            
+            fitnesses.append(sum(a[0] for a in population) / STRANDS_PER_CELL)
+            # fitnesses.append(population[0][0])
+            # print([a[0] for a in population])
+            x.append(current_x)
+            current_x += 1
 
-            avg_fitness = new_avg_fitness
-            update_made = True
-
-        return avg_fitness, population, update_made
+        return population, update_made
 
     def run(self, rng_seed=None):
         if seed != None:
@@ -71,10 +80,9 @@ class DynamicIslandGA(Algorithm):
         # initialize population
         v = [self.__create_population()]
 
-        # sqrt of the average change is when we declare that a population has reasonably converged.
-        # I'll probably need to change this
-        delta = self.__average_change(*v[0].pop[0]) 
-    
+        # get delta percent change
+        delta = self.__average_percent_change(*v[0][0])
+
         # begin run
         v_update_made = [True]
         while self.fitness_calculations <= self.config.FITNESS_CALCULATIONS:
@@ -90,34 +98,30 @@ class DynamicIslandGA(Algorithm):
                     if v_index == src_index:
                         src_index = len(v) - 1
 
-                    insert_tup(v[v_index].pop, v[src_index].pop[0][1].copy(), v[src_index].pop[0][0], STRANDS_PER_CELL + 2)
+                    insert_tup(v[v_index], v[src_index][0][1].copy(), v[src_index][0][0], STRANDS_PER_CELL + 2)
 
-                avg_fitness, population, update_made = self.__run_ga(v[v_index].avg_fit, v[v_index].pop, delta)
+                population, update_made = self.__run_ga(v[v_index], delta)
                 v_update_made[v_index] = update_made
-                v[v_index] = AvgFitnessPopulation(avg_fitness, population)
+                v[v_index] = population
 
             # Only add new population when improvement is stagnant
             if not all(v_update_made):
-                avg_fitness, population = self.__create_population()
-                avg_fitness, population, _ = self.__run_ga(avg_fitness, population, delta)
+                population = self.__create_population()
+                population, _ = self.__run_ga(population, delta)
 
                 # migrate elites to rest of the population to force spread of new population
                 for tgt_index in range(len(v)):
-                    insert_tup(v[tgt_index].pop, population[0][1].copy(), population[0][0], STRANDS_PER_CELL + 2)
+                    insert_tup(v[tgt_index], population[0][1].copy(), population[0][0], STRANDS_PER_CELL + 2)
                     v_update_made[tgt_index] = True
 
-                v.append(AvgFitnessPopulation(avg_fitness, population))
+                v.append(population)
                 v_update_made = [True for _ in range(len(v_update_made))]
                 v_update_made.append(True)
 
-                # update delta
-                delta *= self.config.alpha
-
-        print(len(v))
         best_strand = None
         best_fitness = inf
 
-        for _, population in v:
+        for population in v:
             if population[0][0] < best_fitness:
                 best_fitness = population[0][0]
                 best_strand = population[0][1]

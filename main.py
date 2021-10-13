@@ -23,7 +23,7 @@ else:
 db.should_store = args.store
 
 RUNS = 5
-CONFIG = Problems.TSP
+CONFIG = Problems.Sphere
 
 algorithms = {
     # 'Hill Climber': HillClimber(CONFIG),
@@ -32,14 +32,14 @@ algorithms = {
     # 'Stochastic Beam Search': StochasticBeamSearch(CONFIG),
     # 'Simulated Annealing': SimulatedAnnealing(CONFIG),
     # 'Random Search': RandomSearch(CONFIG),
-    # 'Genetic Algorithm': GA(CONFIG),
-    # 'Island GA Ring Lattice': IslandGA(CONFIG, ring_lattice),
-    # 'Island GA Cell': IslandGA(CONFIG, cell),
-    # 'Island GA Hierarchy': IslandGA(CONFIG, hier),
-    # 'Island GA Caveman': IslandGA(CONFIG, caveman,),
-    # 'Island GA Rewired Caveman': IslandGA(CONFIG, rewired_caveman),
-    # 'Island GA Watts Strogatz': IslandGA(CONFIG, watts_strogatz),
-    # 'Island GA Empty': IslandGA(CONFIG, empty),
+    'Genetic Algorithm': GA(CONFIG),
+    'Island GA Ring Lattice': IslandGA(CONFIG, ring_lattice),
+    'Island GA Cell': IslandGA(CONFIG, cell),
+    'Island GA Hierarchy': IslandGA(CONFIG, hier),
+    'Island GA Caveman': IslandGA(CONFIG, caveman,),
+    'Island GA Rewired Caveman': IslandGA(CONFIG, rewired_caveman),
+    'Island GA Watts Strogatz': IslandGA(CONFIG, watts_strogatz),
+    'Island GA Empty': IslandGA(CONFIG, empty),
     'Island GA Full': IslandGA(CONFIG, fully_connected),
     'Dynamic Island GA': DynamicIslandGA(CONFIG),
 }
