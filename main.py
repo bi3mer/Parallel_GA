@@ -22,8 +22,8 @@ else:
     print('Results not stored for this run.')
 db.should_store = args.store
 
-RUNS = 5
-CONFIG = Problems.Sphere
+RUNS = 10
+CONFIG = Problems.TSP
 
 algorithms = {
     # 'Hill Climber': HillClimber(CONFIG),
@@ -32,7 +32,7 @@ algorithms = {
     # 'Stochastic Beam Search': StochasticBeamSearch(CONFIG),
     # 'Simulated Annealing': SimulatedAnnealing(CONFIG),
     # 'Random Search': RandomSearch(CONFIG),
-    'Genetic Algorithm': GA(CONFIG),
+    # 'Genetic Algorithm': GA(CONFIG),
     'Island GA Ring Lattice': IslandGA(CONFIG, ring_lattice),
     'Island GA Cell': IslandGA(CONFIG, cell),
     'Island GA Hierarchy': IslandGA(CONFIG, hier),
@@ -49,9 +49,11 @@ epochs_till_migration = list(range(2,15))
 
 # for m_rate, e_rate in product(migration_rates, epochs_till_migration):
 for index in range(1):
-    # print(f'\n{index+1}/{50}')
+    print(f'\n{index+1}/{1000}')
     # CONFIG.FITNESS_CALCULATIONS = 2_500 * index
     # CONFIG.epochs_till_migration = index + 2
+    CONFIG.migration_rate = 1.0
+    print(CONFIG.migration_rate)
 
     # print(f'{m_rate}, {e_rate}')
 

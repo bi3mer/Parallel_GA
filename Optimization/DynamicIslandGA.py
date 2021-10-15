@@ -4,11 +4,13 @@ from math import inf
 
 from Utility.Stochastic import weighted_sample_tup
 from Utility.PriorityQueue import insert_tup
-from Utility.Math import get_slope_and_intercept
 from .Algorithm import Algorithm
 
+STRANDS_PER_CELL = 8 
 
-STRANDS_PER_CELL = 8
+# does incrementing this improve
+#
+# split once converged and make a new island
 
 class DynamicIslandGA(Algorithm):
     def __init__(self, config):
@@ -120,6 +122,8 @@ class DynamicIslandGA(Algorithm):
 
         best_strand = None
         best_fitness = inf
+
+        # print(len)
 
         for population in v:
             if population[0][0] < best_fitness:

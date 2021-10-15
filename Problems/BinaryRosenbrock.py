@@ -14,12 +14,12 @@ crossover_rate = 0.95
 migration_rate = 0.01
 mutation_rate = 0.2
 
-FITNESS_CALCULATIONS = 10_000
+FITNESS_CALCULATIONS = 20_000
 
 alpha = 0.9 # simulated annealing
 k = 10 # beam search
 
-strand_size = 1_000
+strand_size = 50
 bits = 16 # 16 is actually 32 bits (16*2)
 
 bounds = [-10, 10]
@@ -40,7 +40,8 @@ def create_strand():
     return [randint(0,1) for _ in range(strand_size*bits)]
 
 def fitness(strand):
-    return sum(decode(strand[i*bits:(i+1)*bits])**2 for i in range(strand_size))
+    temp = [decode(strand[i*bits:(i+1)*bits]) for i in range(strand_size)]
+    return sum(100*(temp[i+1] - temp[i]**2)**2 + (temp[i] - 1)**2 for i in range(strand_size - 1))
 
 def crossover(p_1, p_2):
     if random() < crossover_rate:

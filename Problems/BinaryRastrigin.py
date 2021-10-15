@@ -1,5 +1,5 @@
 from random import randrange, random, randint, shuffle, uniform
-from math import sin
+from math import cos, pi as PI
 
 NAME = 'Binary Sphere'
 
@@ -14,18 +14,20 @@ crossover_rate = 0.95
 migration_rate = 0.01
 mutation_rate = 0.2
 
-FITNESS_CALCULATIONS = 10_000
+FITNESS_CALCULATIONS = 100_000
 
 alpha = 0.9 # simulated annealing
 k = 10 # beam search
 
-strand_size = 1_000
+strand_size = 100
 bits = 16 # 16 is actually 32 bits (16*2)
 
 bounds = [-10, 10]
 
 step_size = 1
 step_size_alpha = 0.9
+
+two_pi = 2 * PI
 
 def decode(strand):
     # https://machinelearningmastery.com/simple-genetic-algorithm-from-scratch-in-python/
@@ -40,7 +42,12 @@ def create_strand():
     return [randint(0,1) for _ in range(strand_size*bits)]
 
 def fitness(strand):
-    return sum(decode(strand[i*bits:(i+1)*bits])**2 for i in range(strand_size))
+    fit = 10 * strand_size
+    for i in range(strand_size):
+        val = decode(strand[i*bits:(i+1)*bits])
+        fit += val**2 - (10 * cos(two_pi * val))
+
+    return fit
 
 def crossover(p_1, p_2):
     if random() < crossover_rate:
